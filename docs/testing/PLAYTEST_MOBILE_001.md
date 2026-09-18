@@ -121,3 +121,24 @@ La caméra est découplée de la rotation du personnage et le déplacement devie
 
 ### Critère
 Changer de direction avec le stick gauche ne doit plus faire pivoter la caméra. Seul le stick droit doit orienter la vue sur mobile.
+
+
+## Problème 4 — La suggestion « pousser » doit devenir une vraie action contextuelle
+
+### Observation
+Après avoir remis la roue, le PNJ dit naturellement : « voyons si elle tient quand on pousse ». Le joueur s'attend donc à pouvoir tester la charrette.
+
+### Décision
+La charrette devient poussable sans obligation de reparler au PNJ.
+
+L'action `Pousser` n'est proposée que lorsque :
+- la roue est en place ;
+- le joueur se trouve du côté cohérent pour exercer une poussée.
+
+Depuis un autre côté, la charrette reste examinable mais ne propose pas artificiellement `Pousser`.
+
+### Conséquence attendue
+La charrette avance réellement sur une courte distance, puis la roue ressort de l'axe avec un retour lisible. Le PNJ peut ensuite réagir à cet état.
+
+### Principe
+Le dialogue peut suggérer une expérience, mais il ne doit pas devenir une condition cachée qui autorise physiquement l'action.
