@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3]
+[gd_scene load_steps=38 format=3]
 
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/bootstrap.gd" id="1_bootstrap"]
 [ext_resource type="Script" path="res://core/player/player_controller.gd" id="2_player"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/cart.gd" id="7_cart"]
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/ancient_stone.gd" id="8_stone"]
 [ext_resource type="Script" path="res://core/input/virtual_joystick.gd" id="9_joystick"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/axle_peg.gd" id="10_peg"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_player"]
 radius = 0.42
@@ -89,6 +90,20 @@ height = 0.24
 [sub_resource type="StandardMaterial3D" id="Material_wheel"]
 albedo_color = Color(0.28, 0.14, 0.06, 1)
 roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_peg"]
+top_radius = 0.09
+bottom_radius = 0.09
+height = 0.72
+radial_segments = 12
+
+[sub_resource type="CylinderShape3D" id="CylinderShape_peg"]
+radius = 0.09
+height = 0.72
+
+[sub_resource type="StandardMaterial3D" id="Material_peg"]
+albedo_color = Color(0.48, 0.27, 0.09, 1)
+roughness = 0.95
 
 [sub_resource type="BoxMesh" id="BoxMesh_cart"]
 size = Vector3(2.8, 0.8, 1.7)
@@ -215,6 +230,10 @@ shape = SubResource("BoxShape_cart")
 [node name="AxleAnchor" type="Marker3D" parent="Cart"]
 position = Vector3(1.6, 0.0, 0)
 
+[node name="RetainerAnchor" type="Marker3D" parent="Cart"]
+position = Vector3(1.88, 0.0, 0)
+rotation_degrees = Vector3(0, 0, 90)
+
 [node name="Wheel" type="RigidBody3D" parent="."]
 position = Vector3(4.3, 0.7, 0.0)
 rotation_degrees = Vector3(90, 0, 0)
@@ -227,6 +246,19 @@ material_override = SubResource("Material_wheel")
 
 [node name="Collision" type="CollisionShape3D" parent="Wheel"]
 shape = SubResource("CylinderShape_wheel")
+
+[node name="AxlePeg" type="RigidBody3D" parent="."]
+position = Vector3(-0.6, 0.65, 1.45)
+rotation_degrees = Vector3(0, 0, 90)
+mass = 0.18
+script = ExtResource("10_peg")
+
+[node name="Mesh" type="MeshInstance3D" parent="AxlePeg"]
+mesh = SubResource("CylinderMesh_peg")
+material_override = SubResource("Material_peg")
+
+[node name="Collision" type="CollisionShape3D" parent="AxlePeg"]
+shape = SubResource("CylinderShape_peg")
 
 [node name="AncientStone" type="StaticBody3D" parent="."]
 position = Vector3(-4.2, 0.9, -3.0)
@@ -320,7 +352,7 @@ offset_left = 1040.0
 offset_top = 18.0
 offset_right = 1260.0
 offset_bottom = 54.0
-text = "MOBILE BUILD 007"
+text = "MOBILE BUILD 008"
 horizontal_alignment = 2
 theme_override_font_sizes/font_size = 16
 
