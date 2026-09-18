@@ -8,7 +8,8 @@ extends Node3D
 @onready var inspection_title: Label = $UI/InspectionPanel/Margin/VBox/Title
 @onready var inspection_detail: Label = $UI/InspectionPanel/Margin/VBox/Detail
 @onready var touch_controls: Control = $UI/TouchControls
-@onready var joystick: GrimoireVirtualJoystick = $UI/TouchControls/VirtualJoystick
+@onready var move_joystick: GrimoireVirtualJoystick = $UI/TouchControls/MoveJoystick
+@onready var look_joystick: GrimoireVirtualJoystick = $UI/TouchControls/LookJoystick
 @onready var interact_button: Button = $UI/TouchControls/InteractButton
 @onready var drop_button: Button = $UI/TouchControls/DropButton
 @onready var throw_button: Button = $UI/TouchControls/ThrowButton
@@ -20,7 +21,8 @@ func _ready() -> void:
 	player.message_requested.connect(_on_message_requested)
 	player.inspection_requested.connect(_on_inspection_requested)
 
-	joystick.direction_changed.connect(player.set_touch_move_input)
+	move_joystick.direction_changed.connect(player.set_touch_move_input)
+	look_joystick.direction_changed.connect(player.set_touch_look_input)
 	interact_button.pressed.connect(player.request_interact)
 	drop_button.pressed.connect(player.request_drop)
 	throw_button.pressed.connect(player.request_throw)
@@ -32,7 +34,7 @@ func _ready() -> void:
 
 	touch_controls.visible = DisplayServer.is_touchscreen_available()
 	if touch_controls.visible:
-		help_label.text = "GRAYBOX — La Vallée oubliée\nJoystick : déplacer • boutons : agir"
+		help_label.text = "GRAYBOX — La Vallée oubliée\nJoystick gauche : déplacer • droit : caméra"
 	else:
 		help_label.text = "GRAYBOX — La Vallée oubliée\nWASD déplacer • E interagir • Q poser • F lancer"
 	_update_touch_action_visibility()
