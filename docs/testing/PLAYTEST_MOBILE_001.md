@@ -1,0 +1,107 @@
+# Playtest mobile 001 — Retour utilisateur
+
+**Date : 18 septembre 2026**  
+**Plateforme : Android / Pixel**  
+**Build : graybox 001**
+
+## Ce qui fonctionne
+
+Le joueur a pu :
+- se déplacer ;
+- prendre une pomme ;
+- lancer la pomme ;
+- prendre la roue ;
+- replacer la roue sur la charrette ;
+- reparler au PNJ.
+
+Le prototype est volontairement sommaire visuellement à ce stade.
+
+## Problème 1 — Réactions du PNJ non contextuelles
+
+### Observation
+Après une action significative sur la charrette, le PNJ répète exactement la même phrase qu'avant.
+
+### Diagnostic
+Le PNJ actuel ne lit pas l'état du problème. Il possède seulement une ligne statique.
+
+### Règle de conception
+Un personnage concerné par un problème doit pouvoir réagir aux changements significatifs du monde.
+
+La réaction ne doit pas forcément être une « félicitation » : elle dépend de l'état réel.
+
+Exemples :
+- roue absente : remarque le problème ;
+- roue simplement remise mais non retenue : remarque que cela semble mieux ou attend de voir si cela tient ;
+- roue qui retombe : réagit à l'échec et apporte éventuellement une information sans donner la solution ;
+- problème réellement résolu : gratitude/reconnaissance adaptée à la méthode utilisée.
+
+Le dialogue doit refléter **l'état du monde**, pas une progression scriptée indépendante.
+
+### Critère
+Aucune ligne importante liée à un problème ne doit rester identique lorsque le changement d'état rend cette ligne incohérente.
+
+## Problème 2 — Objet jeté et perdu définitivement
+
+### Observation
+Une pomme a été lancée hors de la zone utile et n'a pas été retrouvée.
+
+### Diagnostic
+Le système de manipulation permet actuellement à un objet de quitter l'espace jouable sans politique de récupération.
+
+### Règle de conception
+Tout objet manipulable doit déclarer une politique de perte cohérente avec son importance.
+
+Trois catégories minimales :
+
+### A — Objet consommable / non critique
+Il peut être perdu sans bloquer l'aventure.
+
+Exemple possible : une pomme décorative parmi plusieurs.
+
+### B — Objet récupérable
+Il peut sortir temporairement du chemin principal, mais le monde doit fournir un moyen naturel de le récupérer ou d'en obtenir un équivalent.
+
+### C — Objet critique
+Il ne peut jamais devenir définitivement inaccessible par une action normale du joueur.
+
+Solutions possibles selon le contexte :
+- remise à la dernière position valide hors champ ;
+- récupération dans un point logique proche ;
+- retour par un PNJ ;
+- nouvel exemplaire cohérent disponible ;
+- limite physique empêchant une perte irréversible.
+
+Éviter un téléport visible arbitraire lorsque le joueur peut constater l'incohérence.
+
+## Décision sur l'action « lancer »
+
+**Ne pas supprimer globalement l'action lancer.**
+
+Lancer est une interaction physique utile et ludique qui peut produire de vraies expérimentations.
+
+En revanche :
+- certains objets peuvent ne pas être lançables si leur nature le justifie ;
+- un objet critique lançable doit avoir une politique de récupération robuste ;
+- le niveau doit limiter les zones où un objet peut devenir irrécupérable.
+
+## Conséquence architecture
+
+Ajouter au modèle WorldObject une notion minimale de :
+- `importance: NON_CRITICAL | RECOVERABLE | CRITICAL`
+- politique de récupération ou stratégie équivalente si nécessaire ;
+- dernière position valide pour les objets qui en ont besoin.
+
+Ajouter aux PNJ concernés une réaction déterministe basée sur l'état du problème.
+
+## Priorité avant nouvelles fonctionnalités
+
+1. réactions contextuelles du propriétaire de la charrette ;
+2. politique anti-perte des objets ;
+3. test mobile de régression ;
+4. seulement ensuite poursuivre le contenu.
+
+## Note de conception importante
+
+Replacer la roue sur son axe ne signifie pas nécessairement que la charrette est réparée. Dans le design actuel, la roue doit pouvoir retomber lorsqu'on pousse afin de révéler qu'elle n'est pas retenue.
+
+Le PNJ doit donc réagir à ce qui s'est réellement produit, sans féliciter prématurément le joueur pour une réparation encore incomplète.
