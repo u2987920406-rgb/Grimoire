@@ -1,0 +1,68 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://core/player/player_controller.gd" id="1_player"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_player"]
+radius = 0.42
+height = 1.6
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_player"]
+radius = 0.42
+height = 1.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+size = Vector3(22, 0.4, 22)
+
+[sub_resource type="BoxShape3D" id="BoxShape_ground"]
+size = Vector3(22, 0.4, 22)
+
+[sub_resource type="StandardMaterial3D" id="Material_ground"]
+albedo_color = Color(0.36, 0.54, 0.28, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Material_player"]
+albedo_color = Color(0.84, 0.48, 0.2, 1)
+roughness = 0.8
+
+[node name="ForgottenValleyBootstrap" type="Node3D"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -35, 0)
+light_energy = 1.15
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_ground")
+material_override = SubResource("Material_ground")
+
+[node name="Collision" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape_ground")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+position = Vector3(0, 1.2, 2.5)
+script = ExtResource("1_player")
+
+[node name="Mesh" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("CapsuleMesh_player")
+material_override = SubResource("Material_player")
+
+[node name="Collision" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape_player")
+
+[node name="CameraRig" type="Node3D" parent="Player"]
+position = Vector3(0, 0.9, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/CameraRig"]
+position = Vector3(0, 6.8, 8.8)
+rotation_degrees = Vector3(-34, 0, 0)
+current = true
+
+[node name="BootstrapLabel" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 510.0
+offset_bottom = 74.0
+text = "Grimoire — Bootstrap\nWASD : déplacer le personnage"
+theme_override_font_sizes/font_size = 20
