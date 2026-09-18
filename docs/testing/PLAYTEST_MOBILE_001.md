@@ -105,3 +105,19 @@ Ajouter aux PNJ concernés une réaction déterministe basée sur l'état du pro
 Replacer la roue sur son axe ne signifie pas nécessairement que la charrette est réparée. Dans le design actuel, la roue doit pouvoir retomber lorsqu'on pousse afin de révéler qu'elle n'est pas retenue.
 
 Le PNJ doit donc réagir à ce qui s'est réellement produit, sans féliciter prématurément le joueur pour une réparation encore incomplète.
+
+
+## Problème 3 — Déplacement et caméra couplés
+
+### Observation
+Le joystick de déplacement entraîne également un changement de vue, ce qui rend la maniabilité confuse.
+
+### Décision
+Adopter une convention double-stick :
+- gauche = déplacement ;
+- droite = caméra.
+
+La caméra est découplée de la rotation du personnage et le déplacement devient relatif à la vue courante.
+
+### Critère
+Changer de direction avec le stick gauche ne doit plus faire pivoter la caméra. Seul le stick droit doit orienter la vue sur mobile.
