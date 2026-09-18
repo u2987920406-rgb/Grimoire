@@ -1,6 +1,13 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=34 format=3]
 
-[ext_resource type="Script" path="res://core/player/player_controller.gd" id="1_player"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/bootstrap.gd" id="1_bootstrap"]
+[ext_resource type="Script" path="res://core/player/player_controller.gd" id="2_player"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/apple.gd" id="3_apple"]
+[ext_resource type="Script" path="res://core/physics/water_volume.gd" id="4_water"]
+[ext_resource type="Script" path="res://core/characters/simple_npc.gd" id="5_npc"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/cart_wheel.gd" id="6_wheel"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/cart.gd" id="7_cart"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/ancient_stone.gd" id="8_stone"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_player"]
 radius = 0.42
@@ -10,21 +17,93 @@ height = 1.6
 radius = 0.42
 height = 1.6
 
+[sub_resource type="StandardMaterial3D" id="Material_player"]
+albedo_color = Color(0.84, 0.48, 0.2, 1)
+roughness = 0.8
+
+[sub_resource type="SphereShape3D" id="SphereShape_interaction"]
+radius = 2.15
+
 [sub_resource type="BoxMesh" id="BoxMesh_ground"]
-size = Vector3(22, 0.4, 22)
+size = Vector3(24, 0.4, 24)
 
 [sub_resource type="BoxShape3D" id="BoxShape_ground"]
-size = Vector3(22, 0.4, 22)
+size = Vector3(24, 0.4, 24)
 
 [sub_resource type="StandardMaterial3D" id="Material_ground"]
 albedo_color = Color(0.36, 0.54, 0.28, 1)
 roughness = 1.0
 
-[sub_resource type="StandardMaterial3D" id="Material_player"]
-albedo_color = Color(0.84, 0.48, 0.2, 1)
-roughness = 0.8
+[sub_resource type="SphereMesh" id="SphereMesh_apple"]
+radius = 0.28
+height = 0.56
+
+[sub_resource type="SphereShape3D" id="SphereShape_apple"]
+radius = 0.28
+
+[sub_resource type="StandardMaterial3D" id="Material_apple"]
+albedo_color = Color(0.72, 0.1, 0.08, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_water"]
+size = Vector3(10, 0.35, 3.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape_water"]
+size = Vector3(10, 0.55, 3.2)
+
+[sub_resource type="StandardMaterial3D" id="Material_water"]
+albedo_color = Color(0.16, 0.5, 0.78, 0.72)
+transparency = 1
+roughness = 0.25
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_npc"]
+radius = 0.48
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_npc"]
+radius = 0.48
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="Material_npc"]
+albedo_color = Color(0.22, 0.42, 0.72, 1)
+roughness = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wheel"]
+top_radius = 0.58
+bottom_radius = 0.58
+height = 0.24
+radial_segments = 20
+
+[sub_resource type="CylinderShape3D" id="CylinderShape_wheel"]
+radius = 0.58
+height = 0.24
+
+[sub_resource type="StandardMaterial3D" id="Material_wheel"]
+albedo_color = Color(0.28, 0.14, 0.06, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_cart"]
+size = Vector3(2.8, 0.8, 1.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape_cart"]
+size = Vector3(2.8, 0.8, 1.7)
+
+[sub_resource type="StandardMaterial3D" id="Material_cart"]
+albedo_color = Color(0.42, 0.22, 0.08, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_stone"]
+size = Vector3(1.2, 1.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape_stone"]
+size = Vector3(1.2, 1.8, 0.7)
+
+[sub_resource type="StandardMaterial3D" id="Material_stone"]
+albedo_color = Color(0.55, 0.52, 0.44, 1)
+roughness = 1.0
 
 [node name="ForgottenValleyBootstrap" type="Node3D"]
+script = ExtResource("1_bootstrap")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 rotation_degrees = Vector3(-55, -35, 0)
@@ -41,8 +120,8 @@ material_override = SubResource("Material_ground")
 shape = SubResource("BoxShape_ground")
 
 [node name="Player" type="CharacterBody3D" parent="."]
-position = Vector3(0, 1.2, 2.5)
-script = ExtResource("1_player")
+position = Vector3(0, 1.2, 5.5)
+script = ExtResource("2_player")
 
 [node name="Mesh" type="MeshInstance3D" parent="Player"]
 mesh = SubResource("CapsuleMesh_player")
@@ -50,6 +129,17 @@ material_override = SubResource("Material_player")
 
 [node name="Collision" type="CollisionShape3D" parent="Player"]
 shape = SubResource("CapsuleShape_player")
+
+[node name="InteractionArea" type="Area3D" parent="Player"]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+
+[node name="Collision" type="CollisionShape3D" parent="Player/InteractionArea"]
+shape = SubResource("SphereShape_interaction")
+
+[node name="HoldAnchor" type="Marker3D" parent="Player"]
+position = Vector3(0, 1.0, -0.9)
 
 [node name="CameraRig" type="Node3D" parent="Player"]
 position = Vector3(0, 0.9, 0)
@@ -59,10 +149,151 @@ position = Vector3(0, 6.8, 8.8)
 rotation_degrees = Vector3(-34, 0, 0)
 current = true
 
-[node name="BootstrapLabel" type="Label" parent="."]
+[node name="Apple" type="RigidBody3D" parent="."]
+position = Vector3(1.4, 0.7, 2.7)
+mass = 0.25
+script = ExtResource("3_apple")
+
+[node name="Mesh" type="MeshInstance3D" parent="Apple"]
+mesh = SubResource("SphereMesh_apple")
+material_override = SubResource("Material_apple")
+
+[node name="Collision" type="CollisionShape3D" parent="Apple"]
+shape = SubResource("SphereShape_apple")
+
+[node name="River" type="Area3D" parent="."]
+position = Vector3(0, 0.25, -5.2)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("4_water")
+
+[node name="Mesh" type="MeshInstance3D" parent="River"]
+mesh = SubResource("BoxMesh_water")
+material_override = SubResource("Material_water")
+
+[node name="Collision" type="CollisionShape3D" parent="River"]
+shape = SubResource("BoxShape_water")
+
+[node name="CartOwner" type="StaticBody3D" parent="."]
+position = Vector3(-2.4, 1.0, 0.7)
+script = ExtResource("5_npc")
+dialogue_text = "Oh ! Une pomme s'est échappée. Et ma charrette n'a pas l'air d'aller beaucoup mieux…"
+
+[node name="Mesh" type="MeshInstance3D" parent="CartOwner"]
+mesh = SubResource("CapsuleMesh_npc")
+material_override = SubResource("Material_npc")
+
+[node name="Collision" type="CollisionShape3D" parent="CartOwner"]
+shape = SubResource("CapsuleShape_npc")
+
+[node name="Cart" type="StaticBody3D" parent="."]
+position = Vector3(2.2, 0.6, -0.3)
+script = ExtResource("7_cart")
+
+[node name="Mesh" type="MeshInstance3D" parent="Cart"]
+mesh = SubResource("BoxMesh_cart")
+material_override = SubResource("Material_cart")
+
+[node name="Collision" type="CollisionShape3D" parent="Cart"]
+shape = SubResource("BoxShape_cart")
+
+[node name="AxleAnchor" type="Marker3D" parent="Cart"]
+position = Vector3(1.6, 0.0, 0)
+
+[node name="Wheel" type="RigidBody3D" parent="."]
+position = Vector3(4.3, 0.7, 0.0)
+rotation_degrees = Vector3(90, 0, 0)
+mass = 1.2
+script = ExtResource("6_wheel")
+
+[node name="Mesh" type="MeshInstance3D" parent="Wheel"]
+mesh = SubResource("CylinderMesh_wheel")
+material_override = SubResource("Material_wheel")
+
+[node name="Collision" type="CollisionShape3D" parent="Wheel"]
+shape = SubResource("CylinderShape_wheel")
+
+[node name="AncientStone" type="StaticBody3D" parent="."]
+position = Vector3(-4.2, 0.9, -3.0)
+script = ExtResource("8_stone")
+
+[node name="Mesh" type="MeshInstance3D" parent="AncientStone"]
+mesh = SubResource("BoxMesh_stone")
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="AncientStone"]
+shape = SubResource("BoxShape_stone")
+
+[node name="Symbol" type="Label3D" parent="AncientStone"]
+position = Vector3(0, 0.2, 0.38)
+text = "☀\nIII"
+font_size = 72
+outline_size = 8
+billboard = 1
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PromptLabel" type="Label" parent="UI"]
+offset_left = 28.0
+offset_top = 650.0
+offset_right = 880.0
+offset_bottom = 704.0
+text = ""
+theme_override_font_sizes/font_size = 22
+
+[node name="HelpLabel" type="Label" parent="UI"]
 offset_left = 24.0
 offset_top = 20.0
-offset_right = 510.0
-offset_bottom = 74.0
-text = "Grimoire — Bootstrap\nWASD : déplacer le personnage"
-theme_override_font_sizes/font_size = 20
+offset_right = 680.0
+offset_bottom = 90.0
+text = "GRAYBOX — La Vallée oubliée\nWASD déplacer • E interagir • Q poser • F lancer"
+theme_override_font_sizes/font_size = 18
+
+[node name="MessagePanel" type="PanelContainer" parent="UI"]
+offset_left = 260.0
+offset_top = 500.0
+offset_right = 1020.0
+offset_bottom = 620.0
+
+[node name="Margin" type="MarginContainer" parent="UI/MessagePanel"]
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 16
+
+[node name="MessageLabel" type="Label" parent="UI/MessagePanel/Margin"]
+text = ""
+autowrap_mode = 2
+theme_override_font_sizes/font_size = 21
+
+[node name="InspectionPanel" type="PanelContainer" parent="UI"]
+offset_left = 350.0
+offset_top = 145.0
+offset_right = 930.0
+offset_bottom = 560.0
+
+[node name="Margin" type="MarginContainer" parent="UI/InspectionPanel"]
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 28
+
+[node name="VBox" type="VBoxContainer" parent="UI/InspectionPanel/Margin"]
+theme_override_constants/separation = 28
+
+[node name="Title" type="Label" parent="UI/InspectionPanel/Margin/VBox"]
+text = "Inspection"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 28
+
+[node name="Detail" type="Label" parent="UI/InspectionPanel/Margin/VBox"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+theme_override_font_sizes/font_size = 34
+
+[node name="CloseHint" type="Label" parent="UI/InspectionPanel/Margin/VBox"]
+text = "E ou Échap pour revenir"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
