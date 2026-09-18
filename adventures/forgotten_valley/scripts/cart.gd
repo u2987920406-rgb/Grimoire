@@ -2,6 +2,8 @@ extends StaticBody3D
 
 var wheel_attached: bool = false
 var attached_wheel: Node = null
+var wheel_reattached_once: bool = false
+var wheel_failed_once: bool = false
 
 @onready var axle_anchor: Node3D = $AxleAnchor
 
@@ -21,6 +23,7 @@ func interact(player: PlayerController) -> void:
 		wheel.call("attach_to", axle_anchor)
 		attached_wheel = wheel
 		wheel_attached = true
+		wheel_reattached_once = true
 		player.show_message("La roue est remise sur l'axe.")
 		return
 
@@ -28,6 +31,7 @@ func interact(player: PlayerController) -> void:
 		var wheel := attached_wheel
 		attached_wheel = null
 		wheel_attached = false
+		wheel_failed_once = true
 		wheel.detach_from_cart(get_tree().current_scene, Vector3(1.6, 0.7, -0.3))
 		player.show_message("CLONK ! La roue ressort de l'axe. Il manque quelque chose pour la retenir.")
 		return
