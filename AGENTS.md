@@ -14,6 +14,7 @@ Avant toute modification importante, lire :
 3. `docs/design/GAME_DESIGN.md`
 4. `docs/architecture/ARCHITECTURE.md`
 5. `docs/architecture/CONVENTIONS.md`
+6. `docs/art/ART_DIRECTION.md` pour tout travail visuel.
 
 Pour une aventure, lire également sa documentation locale.
 
@@ -30,8 +31,13 @@ En cas de conflit ou d'ambiguïté, ne pas contourner la règle : documenter le 
 - L'échec doit produire une information exploitable, une conséquence compréhensible ou un moment ludique.
 - Le monde obéit à des règles cohérentes.
 - La liberté existe à l'intérieur des contraintes du monde.
+- La créativité ne remplace jamais la physique, les sciences, la causalité ou les contraintes humaines pertinentes.
+- Une idée originale n'est pas valide uniquement parce qu'elle est originale.
+- Ne jamais ajouter une solution invraisemblable uniquement pour augmenter artificiellement le nombre de choix.
+- Un problème peut n'avoir qu'une seule résultante lorsque sa réalité l'exige.
 - Une solution émergente valide ne doit pas être rejetée uniquement parce qu'elle n'était pas prévue.
 - Évaluer l'état du monde et les contraintes de réussite, pas la recette attendue.
+- Distinguer le problème apparent du véritable objectif lorsque pertinent.
 - Les connaissances servent l'action et doivent, lorsque pertinent, pouvoir être réutilisées dans un autre contexte.
 - Une aventure ne réimplémente pas un système générique du Core.
 - Une aventure ne dépend jamais d'une autre aventure.
