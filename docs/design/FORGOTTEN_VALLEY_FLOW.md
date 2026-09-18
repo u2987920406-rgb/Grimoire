@@ -35,14 +35,16 @@ La roue se remet sur son axe mais ressort lorsqu'on pousse.
 
 Le problème apparent est la roue. Le besoin du personnage est de poursuivre son transport.
 
-Familles candidates uniquement si physiquement et contextuellement justifiées :
-1. dépannage temporaire ;
-2. réparation durable ;
-3. contournement du besoin par un autre moyen de transport.
+La première boucle complète du graybox devient :
+**observer → remettre la roue → pousser → CLONK → examiner l'axe → remarquer le trou de retenue → trouver une cheville → l'insérer → pousser à nouveau → constater que la roue tient.**
 
-Ne jamais forcer trois solutions si le prototype montre qu'une voie est artificielle.
+La cheville n'est pas une recette arbitraire : elle fonctionne parce qu'elle traverse un trou de retenue visible au bout de l'axe et empêche physiquement la roue de ressortir.
 
-Acquis : examiner, essayer, constater, comparer des matériaux, chercher une information ou un outil.
+Le dialogue peut suggérer de tester la charrette, mais n'est jamais une condition cachée pour pousser.
+
+Familles alternatives ne seront ajoutées que si elles sont réellement plausibles et testables dans le monde.
+
+Acquis : examiner, essayer, constater, formuler une hypothèse mécanique, chercher un objet adapté, corriger puis retester.
 
 ### 10–20 min — Le village s'ouvre
 Le joueur découvre le moulin, l'atelier, le pont, quelques habitants et aperçoit les ruines de la montagne.
