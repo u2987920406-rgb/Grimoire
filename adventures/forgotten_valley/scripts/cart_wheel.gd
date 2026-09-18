@@ -17,7 +17,7 @@ func attach_to(anchor: Node3D) -> void:
 	set_held(true)
 	reparent(anchor, false)
 	transform = Transform3D.IDENTITY
-	rotation_degrees = Vector3(90, 0, 0)
+	rotation_degrees = Vector3(0, 0, 90)
 	remember_safe_position()
 
 func detach_from_cart(world_parent: Node, impulse: Vector3) -> void:
