@@ -17,6 +17,7 @@ signal inspection_requested(title: String, detail: String)
 @onready var interaction_area: Area3D = $InteractionArea
 @onready var hold_anchor: Marker3D = $HoldAnchor
 @onready var camera_rig: Node3D = $"../CameraRig"
+@onready var camera_pitch: Node3D = $"../CameraRig/CameraPitch"
 
 var held_object: CarryableBody = null
 var controls_enabled: bool = true
@@ -28,7 +29,7 @@ var _camera_pitch: float = deg_to_rad(-34.0)
 
 func _ready() -> void:
 	_camera_yaw = camera_rig.rotation.y
-	_camera_pitch = camera_rig.rotation.x
+	_camera_pitch = camera_pitch.rotation.x
 
 func _physics_process(delta: float) -> void:
 	_update_camera(delta)
@@ -45,14 +46,11 @@ func _physics_process(delta: float) -> void:
 	if input_vector.length_squared() > 1.0:
 		input_vector = input_vector.normalized()
 
-	var camera_forward := -camera_rig.global_transform.basis.z
-	camera_forward.y = 0.0
-	camera_forward = camera_forward.normalized()
-	var camera_right := camera_rig.global_transform.basis.x
-	camera_right.y = 0.0
-	camera_right = camera_right.normalized()
-
-	var desired_direction := camera_right * input_vector.x + camera_forward * -input_vector.y
+	# Le stick représente l'écran : haut = -Z caméra, bas = +Z,
+	# gauche/droite suivent l'orientation horizontale de la caméra.
+	var local_move := Vector3(input_vector.x, 0.0, input_vector.y)
+	var desired_direction := camera_rig.global_basis * local_move
+	desired_direction.y = 0.0
 	if desired_direction.length_squared() > 1.0:
 		desired_direction = desired_direction.normalized()
 
@@ -65,9 +63,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y = 0.0
 
+	# Le personnage regarde toujours dans le sens où il se déplace.
+	# Pas de marche arrière implicite dans le déplacement normal.
 	if desired_direction.length_squared() > 0.001:
-		var target_yaw := atan2(desired_direction.x, -desired_direction.z)
-		rotation.y = lerp_angle(rotation.y, target_yaw, minf(1.0, 10.0 * delta))
+		look_at(global_position + desired_direction, Vector3.UP)
 
 	move_and_slide()
 
@@ -90,20 +89,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _update_camera(delta: float) -> void:
-	camera_rig.global_position = global_position + Vector3(0.0, 0.9, 0.0)
+	camera_rig.global_position = global_position + Vector3(0.0, 1.0, 0.0)
 
-	if not controls_enabled:
-		return
+	if controls_enabled:
+		_camera_yaw -= touch_look_input.x * camera_yaw_speed * delta
+		_camera_pitch -= touch_look_input.y * camera_pitch_speed * delta
+		_camera_pitch = clamp(
+			_camera_pitch,
+			deg_to_rad(camera_min_pitch_degrees),
+			deg_to_rad(camera_max_pitch_degrees)
+		)
 
-	_camera_yaw -= touch_look_input.x * camera_yaw_speed * delta
-	_camera_pitch -= touch_look_input.y * camera_pitch_speed * delta
-	_camera_pitch = clamp(
-		_camera_pitch,
-		deg_to_rad(camera_min_pitch_degrees),
-		deg_to_rad(camera_max_pitch_degrees)
-	)
-
-	camera_rig.rotation = Vector3(_camera_pitch, _camera_yaw, 0.0)
+	# Yaw et pitch sont séparés : le rig tourne autour du joueur,
+	# le pivot vertical garde la caméra centrée sur lui.
+	camera_rig.rotation = Vector3(0.0, _camera_yaw, 0.0)
+	camera_pitch.rotation = Vector3(_camera_pitch, 0.0, 0.0)
 
 func _update_interaction_target() -> void:
 	var nearest: Node = null
