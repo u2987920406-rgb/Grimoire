@@ -13,6 +13,7 @@ extends Node3D
 @onready var drop_button: Button = $UI/TouchControls/DropButton
 @onready var throw_button: Button = $UI/TouchControls/ThrowButton
 @onready var close_button: Button = $UI/CloseButton
+@onready var help_label: Label = $UI/HelpLabel
 
 func _ready() -> void:
 	player.prompt_changed.connect(_on_prompt_changed)
@@ -30,6 +31,10 @@ func _ready() -> void:
 	close_button.visible = false
 
 	touch_controls.visible = DisplayServer.is_touchscreen_available()
+	if touch_controls.visible:
+		help_label.text = "GRAYBOX — La Vallée oubliée\nJoystick : déplacer • boutons : agir"
+	else:
+		help_label.text = "GRAYBOX — La Vallée oubliée\nWASD déplacer • E interagir • Q poser • F lancer"
 	_update_touch_action_visibility()
 
 func _process(_delta: float) -> void:
@@ -46,7 +51,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _on_prompt_changed(text: String) -> void:
-	prompt_label.text = text
+	if touch_controls.visible:
+		prompt_label.text = text
+	else:
+		prompt_label.text = ("E  " + text) if not text.is_empty() else ""
 	interact_button.disabled = text.is_empty()
 
 func _on_message_requested(text: String) -> void:
