@@ -160,7 +160,6 @@ rotation_degrees = Vector3(-34, 0, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig"]
 position = Vector3(0, 6.8, 8.8)
-rotation_degrees = Vector3(-34, 0, 0)
 current = true
 
 [node name="Apple" type="RigidBody3D" parent="."]
