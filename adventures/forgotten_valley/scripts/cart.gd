@@ -2,8 +2,8 @@ extends StaticBody3D
 
 @export var push_distance: float = 1.4
 @export var push_duration: float = 0.55
-@export var push_side_min_z: float = 0.55
-@export var push_side_max_x: float = 1.9
+@export var push_side_min_z: float = 1.15
+@export var push_side_max_x: float = 0.95
 
 var wheel_attached: bool = false
 var attached_wheel: Node = null
@@ -88,13 +88,14 @@ func _examine_cart(player: PlayerController) -> void:
 
 func _is_player_in_push_position(player: PlayerController) -> bool:
 	var local_player := to_local(player.global_position)
-	return local_player.z >= push_side_min_z and absf(local_player.x) <= push_side_max_x
+	return absf(local_player.z) >= push_side_min_z and absf(local_player.x) <= push_side_max_x
 
 func _push_cart(player: PlayerController) -> void:
 	push_in_progress = true
 	player.controls_enabled = false
 
-	var push_direction := -global_basis.z.normalized()
+	var local_player := to_local(player.global_position)
+	var push_direction := (-global_basis.z if local_player.z > 0.0 else global_basis.z).normalized()
 	var distance := push_distance * (1.6 if wheel_retained else 1.0)
 	var target_position := global_position + push_direction * distance
 
