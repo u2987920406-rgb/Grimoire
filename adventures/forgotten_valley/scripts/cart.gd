@@ -18,7 +18,7 @@ func get_interaction_label(player: PlayerController) -> String:
 func interact(player: PlayerController) -> void:
 	if player.held_object != null and player.held_object.has_method("is_cart_wheel"):
 		var wheel := player.take_held_object()
-		wheel.attach_to(axle_anchor)
+		wheel.call("attach_to", axle_anchor)
 		attached_wheel = wheel
 		wheel_attached = true
 		player.show_message("La roue est remise sur l'axe.")
