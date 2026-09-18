@@ -1,4 +1,4 @@
-class_name VirtualJoystick
+class_name GrimoireVirtualJoystick
 extends Control
 
 signal direction_changed(direction: Vector2)
