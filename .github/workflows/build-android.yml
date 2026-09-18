@@ -29,6 +29,29 @@ jobs:
           echo "number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
           echo "Building Grimoire mobile build $BUILD_NUMBER"
 
+      - name: Restore persistent debug keystore
+        uses: actions/cache@v4
+        with:
+          path: /root/.grimoire-signing/debug.keystore
+          key: grimoire-android-debug-keystore-v1
+
+      - name: Prepare stable debug signing key
+        shell: bash
+        run: |
+          mkdir -p /root/.grimoire-signing
+          if [ ! -f /root/.grimoire-signing/debug.keystore ]; then
+            keytool -genkeypair \
+              -keystore /root/.grimoire-signing/debug.keystore \
+              -storepass android \
+              -alias androiddebugkey \
+              -keypass android \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -dname "CN=Android Debug,O=Grimoire,C=FR"
+          fi
+          cp /root/.grimoire-signing/debug.keystore /root/debug.keystore
+
       - name: Prepare Godot export templates
         shell: bash
         run: |
