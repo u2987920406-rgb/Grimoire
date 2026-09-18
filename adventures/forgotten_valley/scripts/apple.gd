@@ -4,9 +4,7 @@ var in_water: bool = false
 
 func _ready() -> void:
 	interaction_name = "Pomme"
-	importance = CarryableBody.Importance.RECOVERABLE
-	recovery_radius = 10.0
-	recovery_min_y = -0.5
+	importance = CarryableBody.Importance.NON_CRITICAL
 	super._ready()
 
 func set_in_water(value: bool) -> void:
