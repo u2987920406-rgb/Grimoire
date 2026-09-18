@@ -5,7 +5,8 @@ var attached_to_cart: bool = false
 func _ready() -> void:
 	interaction_name = "Roue"
 	importance = CarryableBody.Importance.CRITICAL
-	recovery_radius = 16.0
+	recovery_radius = 10.0
+	recovery_min_y = -0.5
 	super._ready()
 
 func is_cart_wheel() -> bool:
