@@ -3,6 +3,8 @@ name: Build Android APK
 on:
   push:
     branches: [main]
+    paths:
+      - "mobile_build.txt"
   workflow_dispatch:
 
 permissions:
@@ -18,6 +20,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Read mobile build number
+        id: build
+        shell: bash
+        run: |
+          BUILD_NUMBER="$(tr -d '\\r\\n ' < mobile_build.txt)"
+          echo "number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "Building Grimoire mobile build $BUILD_NUMBER"
 
       - name: Prepare Godot export templates
         shell: bash
@@ -39,12 +49,12 @@ jobs:
         shell: bash
         run: |
           mkdir -p build/android
-          godot --headless --verbose --path . --export-debug "Android Debug" build/android/grimoire-graybox-debug.apk
+          godot --headless --verbose --path . --export-debug "Android Debug" "build/android/grimoire-mobile-${{ steps.build.outputs.number }}.apk"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: grimoire-android-debug
-          path: build/android/grimoire-graybox-debug.apk
+          name: grimoire-mobile-${{ steps.build.outputs.number }}
+          path: build/android/grimoire-mobile-${{ steps.build.outputs.number }}.apk
           if-no-files-found: error
           retention-days: 14
