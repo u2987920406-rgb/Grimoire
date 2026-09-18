@@ -106,7 +106,7 @@ albedo_color = Color(0.48, 0.27, 0.09, 1)
 roughness = 0.95
 
 [sub_resource type="BoxMesh" id="BoxMesh_cart"]
-size = Vector3(2.8, 0.8, 1.7)
+size = Vector3(1.7, 0.8, 2.8)
 
 [sub_resource type="BoxShape3D" id="BoxShape_cart"]
 size = Vector3(2.8, 0.8, 1.7)
@@ -352,7 +352,7 @@ offset_left = 1040.0
 offset_top = 18.0
 offset_right = 1260.0
 offset_bottom = 54.0
-text = "MOBILE BUILD 008"
+text = "MOBILE BUILD 009"
 horizontal_alignment = 2
 theme_override_font_sizes/font_size = 16
 
