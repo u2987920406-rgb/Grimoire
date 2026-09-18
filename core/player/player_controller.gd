@@ -15,6 +15,7 @@ signal inspection_requested(title: String, detail: String)
 
 var held_object: CarryableBody = null
 var controls_enabled: bool = true
+var touch_move_input: Vector2 = Vector2.ZERO
 var _current_target: Node = null
 
 func _physics_process(delta: float) -> void:
@@ -26,7 +27,10 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	var input_vector := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var keyboard_input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var input_vector := keyboard_input + touch_move_input
+	if input_vector.length_squared() > 1.0:
+		input_vector = input_vector.normalized()
 	var desired_direction := Vector3(input_vector.x, 0.0, input_vector.y)
 
 	if desired_direction.length_squared() > 1.0:
@@ -51,19 +55,18 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not controls_enabled:
 		return
 
-	if event.is_action_pressed("interact") and _current_target != null:
-		if _current_target.has_method("interact"):
-			_current_target.call("interact", self)
-			get_viewport().set_input_as_handled()
-			return
-
-	if event.is_action_pressed("drop_object") and held_object != null:
-		drop_held()
+	if event.is_action_pressed("interact"):
+		request_interact()
 		get_viewport().set_input_as_handled()
 		return
 
-	if event.is_action_pressed("throw_object") and held_object != null:
-		throw_held()
+	if event.is_action_pressed("drop_object"):
+		request_drop()
+		get_viewport().set_input_as_handled()
+		return
+
+	if event.is_action_pressed("throw_object"):
+		request_throw()
 		get_viewport().set_input_as_handled()
 
 func _update_interaction_target() -> void:
@@ -89,6 +92,28 @@ func _update_interaction_target() -> void:
 		parts.append("Q  Poser")
 		parts.append("F  Lancer")
 	prompt_changed.emit("   •   ".join(parts))
+
+func set_touch_move_input(value: Vector2) -> void:
+	touch_move_input = value.limit_length(1.0)
+
+func request_interact() -> void:
+	if not controls_enabled or _current_target == null:
+		return
+	if _current_target.has_method("interact"):
+		_current_target.call("interact", self)
+
+func request_drop() -> void:
+	if not controls_enabled or held_object == null:
+		return
+	drop_held()
+
+func request_throw() -> void:
+	if not controls_enabled or held_object == null:
+		return
+	throw_held()
+
+func has_held_object() -> bool:
+	return held_object != null
 
 func pick_up(object: CarryableBody) -> void:
 	if held_object != null:
