@@ -36,6 +36,19 @@ move_back={
 "events": [Object(InputEventKey,"physical_keycode":83)]
 }
 
+interact={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":69)]
+}
+drop_object={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":81)]
+}
+throw_object={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":70)]
+}
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
