@@ -109,7 +109,7 @@ roughness = 0.95
 size = Vector3(1.7, 0.8, 2.8)
 
 [sub_resource type="BoxShape3D" id="BoxShape_cart"]
-size = Vector3(2.8, 0.8, 1.7)
+size = Vector3(1.7, 0.8, 2.8)
 
 [sub_resource type="StandardMaterial3D" id="Material_cart"]
 albedo_color = Color(0.42, 0.22, 0.08, 1)
@@ -228,15 +228,20 @@ material_override = SubResource("Material_cart")
 shape = SubResource("BoxShape_cart")
 
 [node name="AxleAnchor" type="Marker3D" parent="Cart"]
-position = Vector3(1.6, 0.0, 0)
+position = Vector3(0.98, -0.02, 0)
 
 [node name="RetainerAnchor" type="Marker3D" parent="Cart"]
-position = Vector3(1.88, 0.0, 0)
+position = Vector3(1.16, -0.02, 0)
+
+[node name="FixedWheel" type="MeshInstance3D" parent="Cart"]
+position = Vector3(-0.98, -0.02, 0)
 rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("CylinderMesh_wheel")
+material_override = SubResource("Material_wheel")
 
 [node name="Wheel" type="RigidBody3D" parent="."]
-position = Vector3(4.3, 0.7, 0.0)
-rotation_degrees = Vector3(90, 0, 0)
+position = Vector3(4.0, 0.62, 0.0)
+rotation_degrees = Vector3(0, 0, 90)
 mass = 1.2
 script = ExtResource("6_wheel")
 
@@ -249,7 +254,6 @@ shape = SubResource("CylinderShape_wheel")
 
 [node name="AxlePeg" type="RigidBody3D" parent="."]
 position = Vector3(-0.6, 0.65, 1.45)
-rotation_degrees = Vector3(0, 0, 90)
 mass = 0.18
 script = ExtResource("10_peg")
 
@@ -352,7 +356,7 @@ offset_left = 1040.0
 offset_top = 18.0
 offset_right = 1260.0
 offset_bottom = 54.0
-text = "MOBILE BUILD 009"
+text = "MOBILE BUILD 010"
 horizontal_alignment = 2
 theme_override_font_sizes/font_size = 16
 
