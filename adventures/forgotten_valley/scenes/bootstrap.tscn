@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/cart_wheel.gd" id="6_wheel"]
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/cart.gd" id="7_cart"]
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/ancient_stone.gd" id="8_stone"]
+[ext_resource type="Script" path="res://core/input/virtual_joystick.gd" id="9_joystick"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_player"]
 radius = 0.42
@@ -232,6 +233,73 @@ outline_size = 8
 billboard = 1
 
 [node name="UI" type="CanvasLayer" parent="."]
+
+[node name="TouchControls" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VirtualJoystick" type="Control" parent="UI/TouchControls"]
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 34.0
+offset_top = -214.0
+offset_right = 214.0
+offset_bottom = -34.0
+mouse_filter = 0
+script = ExtResource("9_joystick")
+
+[node name="InteractButton" type="Button" parent="UI/TouchControls"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -188.0
+offset_top = -158.0
+offset_right = -38.0
+offset_bottom = -72.0
+text = "Interagir"
+theme_override_font_sizes/font_size = 22
+
+[node name="DropButton" type="Button" parent="UI/TouchControls"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -350.0
+offset_top = -132.0
+offset_right = -220.0
+offset_bottom = -62.0
+text = "Poser"
+theme_override_font_sizes/font_size = 20
+
+[node name="ThrowButton" type="Button" parent="UI/TouchControls"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -350.0
+offset_top = -214.0
+offset_right = -220.0
+offset_bottom = -144.0
+text = "Lancer"
+theme_override_font_sizes/font_size = 20
+
+[node name="CloseButton" type="Button" parent="UI"]
+offset_left = 1080.0
+offset_top = 38.0
+offset_right = 1244.0
+offset_bottom = 104.0
+text = "Retour"
+theme_override_font_sizes/font_size = 20
 
 [node name="PromptLabel" type="Label" parent="UI"]
 offset_left = 28.0
