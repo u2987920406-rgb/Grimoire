@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://core/player/player_controller.gd" id="2_player"]
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/apple.gd" id="3_apple"]
 [ext_resource type="Script" path="res://core/physics/water_volume.gd" id="4_water"]
-[ext_resource type="Script" path="res://core/characters/simple_npc.gd" id="5_npc"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/cart_owner.gd" id="5_npc"]
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/cart_wheel.gd" id="6_wheel"]
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/cart.gd" id="7_cart"]
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/ancient_stone.gd" id="8_stone"]
@@ -20,6 +20,13 @@ height = 1.6
 
 [sub_resource type="StandardMaterial3D" id="Material_player"]
 albedo_color = Color(0.84, 0.48, 0.2, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_player_front"]
+size = Vector3(0.34, 0.18, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="Material_player_front"]
+albedo_color = Color(0.12, 0.18, 0.26, 1)
 roughness = 0.8
 
 [sub_resource type="SphereShape3D" id="SphereShape_interaction"]
@@ -131,6 +138,11 @@ material_override = SubResource("Material_player")
 [node name="Collision" type="CollisionShape3D" parent="Player"]
 shape = SubResource("CapsuleShape_player")
 
+[node name="FrontMarker" type="MeshInstance3D" parent="Player"]
+position = Vector3(0, 0.15, -0.55)
+mesh = SubResource("BoxMesh_player_front")
+material_override = SubResource("Material_player_front")
+
 [node name="InteractionArea" type="Area3D" parent="Player"]
 collision_layer = 0
 collision_mask = 1
@@ -179,7 +191,7 @@ shape = SubResource("BoxShape_water")
 [node name="CartOwner" type="StaticBody3D" parent="."]
 position = Vector3(-2.4, 1.0, 0.7)
 script = ExtResource("5_npc")
-dialogue_text = "Oh ! Une pomme s'est échappée. Et ma charrette n'a pas l'air d'aller beaucoup mieux…"
+cart_path = NodePath("../Cart")
 
 [node name="Mesh" type="MeshInstance3D" parent="CartOwner"]
 mesh = SubResource("CapsuleMesh_npc")
@@ -307,7 +319,7 @@ offset_left = 1040.0
 offset_top = 18.0
 offset_right = 1260.0
 offset_bottom = 54.0
-text = "MOBILE BUILD 002"
+text = "MOBILE BUILD 003"
 horizontal_alignment = 2
 theme_override_font_sizes/font_size = 16
 
