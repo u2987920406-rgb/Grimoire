@@ -85,13 +85,10 @@ func _update_interaction_target() -> void:
 
 	_current_target = nearest
 
-	var parts: Array[String] = []
+	var interaction_label := ""
 	if _current_target != null and _current_target.has_method("get_interaction_label"):
-		parts.append("E  " + str(_current_target.call("get_interaction_label", self)))
-	if held_object != null:
-		parts.append("Q  Poser")
-		parts.append("F  Lancer")
-	prompt_changed.emit("   •   ".join(parts))
+		interaction_label = str(_current_target.call("get_interaction_label", self))
+	prompt_changed.emit(interaction_label)
 
 func set_touch_move_input(value: Vector2) -> void:
 	touch_move_input = value.limit_length(1.0)
