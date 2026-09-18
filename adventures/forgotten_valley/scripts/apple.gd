@@ -4,6 +4,8 @@ var in_water: bool = false
 
 func _ready() -> void:
 	interaction_name = "Pomme"
+	importance = Importance.RECOVERABLE
+	recovery_radius = 16.0
 	super._ready()
 
 func set_in_water(value: bool) -> void:
