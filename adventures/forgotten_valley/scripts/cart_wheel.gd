@@ -4,6 +4,8 @@ var attached_to_cart: bool = false
 
 func _ready() -> void:
 	interaction_name = "Roue"
+	importance = Importance.CRITICAL
+	recovery_radius = 16.0
 	super._ready()
 
 func is_cart_wheel() -> bool:
