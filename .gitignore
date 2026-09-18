@@ -2,7 +2,6 @@
 .godot/
 .import/
 export.cfg
-export_presets.cfg
 
 # OS / editor
 .DS_Store
@@ -13,3 +12,6 @@ Thumbs.db
 # Local builds
 build/
 dist/
+
+# Export credentials must remain local
+.godot/export_credentials.cfg
