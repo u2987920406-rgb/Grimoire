@@ -2,8 +2,8 @@ extends StaticBody3D
 
 @export var push_distance: float = 1.4
 @export var push_duration: float = 0.55
-@export var push_side_min_z: float = 1.15
-@export var push_side_max_x: float = 0.95
+@export var push_side_min_z: float = 1.35
+@export var push_side_max_x: float = 0.75
 
 var wheel_attached: bool = false
 var attached_wheel: Node = null
