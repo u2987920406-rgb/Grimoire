@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3]
+[gd_scene load_steps=46 format=3]
 
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/bootstrap.gd" id="1_bootstrap"]
 [ext_resource type="Script" path="res://core/player/player_controller.gd" id="2_player"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/ancient_stone.gd" id="8_stone"]
 [ext_resource type="Script" path="res://core/input/virtual_joystick.gd" id="9_joystick"]
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/axle_peg.gd" id="10_peg"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/landmark.gd" id="11_landmark"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/village_resident.gd" id="12_resident"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_player"]
 radius = 0.42
@@ -125,6 +127,27 @@ size = Vector3(1.2, 1.8, 0.7)
 albedo_color = Color(0.55, 0.52, 0.44, 1)
 roughness = 1.0
 
+[sub_resource type="BoxMesh" id="BoxMesh_bridge"]
+size = Vector3(2.6, 0.22, 4.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape_bridge"]
+size = Vector3(2.6, 0.22, 4.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_building"]
+size = Vector3(3.0, 2.4, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape_building"]
+size = Vector3(3.0, 2.4, 3.0)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_mill"]
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.28
+radial_segments = 20
+
+[sub_resource type="BoxMesh" id="BoxMesh_path"]
+size = Vector3(3.2, 0.08, 8.0)
+
 [node name="ForgottenValleyBootstrap" type="Node3D"]
 script = ExtResource("1_bootstrap")
 
@@ -204,6 +227,21 @@ material_override = SubResource("Material_water")
 [node name="Collision" type="CollisionShape3D" parent="River"]
 shape = SubResource("BoxShape_water")
 
+[node name="VillagePath" type="MeshInstance3D" parent="."]
+position = Vector3(2.2, 0.23, -7.8)
+mesh = SubResource("BoxMesh_path")
+material_override = SubResource("Material_cart")
+
+[node name="Bridge" type="StaticBody3D" parent="."]
+position = Vector3(2.2, 0.42, -5.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bridge"]
+mesh = SubResource("BoxMesh_bridge")
+material_override = SubResource("Material_cart")
+
+[node name="Collision" type="CollisionShape3D" parent="Bridge"]
+shape = SubResource("BoxShape_bridge")
+
 [node name="CartOwner" type="StaticBody3D" parent="."]
 position = Vector3(-2.4, 1.0, 0.7)
 script = ExtResource("5_npc")
@@ -265,7 +303,7 @@ material_override = SubResource("Material_peg")
 shape = SubResource("CylinderShape_peg")
 
 [node name="AncientStone" type="StaticBody3D" parent="."]
-position = Vector3(-4.2, 0.9, -3.0)
+position = Vector3(0.0, 0.9, -3.0)
 script = ExtResource("8_stone")
 
 [node name="Mesh" type="MeshInstance3D" parent="AncientStone"]
@@ -281,6 +319,70 @@ text = "☀\nIII"
 font_size = 72
 outline_size = 8
 billboard = 1
+
+[node name="Mill" type="StaticBody3D" parent="."]
+position = Vector3(-2.4, 1.4, -9.2)
+script = ExtResource("11_landmark")
+inspection_title = "Le vieux moulin"
+inspection_detail = "La roue du moulin est immobile. Pourtant, l'eau du canal arrive bien jusqu'ici."
+
+[node name="Mesh" type="MeshInstance3D" parent="Mill"]
+mesh = SubResource("BoxMesh_building")
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Mill"]
+shape = SubResource("BoxShape_building")
+
+[node name="MillWheel" type="MeshInstance3D" parent="Mill"]
+position = Vector3(1.65, -0.25, 0.0)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("CylinderMesh_mill")
+material_override = SubResource("Material_wheel")
+
+[node name="Workshop" type="StaticBody3D" parent="."]
+position = Vector3(4.6, 1.4, -9.0)
+script = ExtResource("11_landmark")
+inspection_title = "Atelier"
+inspection_detail = "Des outils, des morceaux de bois et des pièces métalliques. Quelqu'un travaille ici régulièrement."
+
+[node name="Mesh" type="MeshInstance3D" parent="Workshop"]
+mesh = SubResource("BoxMesh_building")
+material_override = SubResource("Material_cart")
+
+[node name="Collision" type="CollisionShape3D" parent="Workshop"]
+shape = SubResource("BoxShape_building")
+
+[node name="VillageResident" type="StaticBody3D" parent="."]
+position = Vector3(1.0, 1.0, -8.3)
+script = ExtResource("12_resident")
+cart_path = NodePath("../Cart")
+
+[node name="Mesh" type="MeshInstance3D" parent="VillageResident"]
+mesh = SubResource("CapsuleMesh_npc")
+material_override = SubResource("Material_npc")
+
+[node name="Collision" type="CollisionShape3D" parent="VillageResident"]
+shape = SubResource("CapsuleShape_npc")
+
+[node name="HouseA" type="StaticBody3D" parent="."]
+position = Vector3(-5.0, 1.4, -9.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="HouseA"]
+mesh = SubResource("BoxMesh_building")
+material_override = SubResource("Material_cart")
+
+[node name="Collision" type="CollisionShape3D" parent="HouseA"]
+shape = SubResource("BoxShape_building")
+
+[node name="HouseB" type="StaticBody3D" parent="."]
+position = Vector3(6.0, 1.4, -5.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="HouseB"]
+mesh = SubResource("BoxMesh_building")
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="HouseB"]
+shape = SubResource("BoxShape_building")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -356,7 +458,7 @@ offset_left = 1040.0
 offset_top = 18.0
 offset_right = 1260.0
 offset_bottom = 54.0
-text = "MOBILE BUILD 013"
+text = "MOBILE BUILD 014"
 horizontal_alignment = 2
 theme_override_font_sizes/font_size = 16
 
