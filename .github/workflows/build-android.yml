@@ -74,19 +74,36 @@ jobs:
           mkdir -p build/android
           godot --headless --verbose --path . --export-debug "Android Debug" "build/android/grimoire-mobile-${{ steps.build.outputs.number }}.apk"
 
+      - name: Install Android 16K diagnostic tools
+        shell: bash
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "build-tools;35.0.0" "ndk;28.0.12433566"
+
       - name: Diagnose APK
         shell: bash
         run: |
+          set -e
           APK="build/android/grimoire-mobile-${{ steps.build.outputs.number }}.apk"
           echo "===== AAPT BADGING ====="
-          /usr/lib/android-sdk/build-tools/33.0.2/aapt dump badging "$APK" || true
+          /usr/lib/android-sdk/build-tools/35.0.0/aapt dump badging "$APK"
           echo "===== APK SIGNATURE ====="
-          /usr/lib/android-sdk/build-tools/33.0.2/apksigner verify --verbose --print-certs "$APK"
-          echo "===== ZIPALIGN 4K ====="
-          /usr/lib/android-sdk/build-tools/33.0.2/zipalign -c -v 4 "$APK"
-          echo "===== NATIVE LIBS ====="
-          unzip -l "$APK" | grep 'lib/.*\.so' || true
-
+          /usr/lib/android-sdk/build-tools/35.0.0/apksigner verify --verbose --print-certs "$APK"
+          echo "===== ZIPALIGN 16K ====="
+          /usr/lib/android-sdk/build-tools/35.0.0/zipalign -c -P 16 -v 4 "$APK"
+          echo "===== ELF LOAD ALIGNMENT ====="
+          rm -rf /tmp/grimoire-apk && mkdir -p /tmp/grimoire-apk
+          unzip -q "$APK" -d /tmp/grimoire-apk
+          OBJDUMP="/usr/lib/android-sdk/ndk/28.0.12433566/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-objdump"
+          for SO in /tmp/grimoire-apk/lib/arm64-v8a/*.so; do
+            echo "--- $SO"
+            "$OBJDUMP" -p "$SO" | grep LOAD
+            if "$OBJDUMP" -p "$SO" | grep LOAD | grep -Eq "align 2\\*\\*(1[0-3]|[0-9])$"; then
+              echo "UNALIGNED_16K: $SO"
+              exit 1
+            fi
+          done
+          echo "ALL_ARM64_ELF_SEGMENTS_16K_ALIGNED"
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
