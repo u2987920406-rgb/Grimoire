@@ -107,7 +107,7 @@ func _push_cart(player: PlayerController) -> void:
 
 	if wheel_retained:
 		cart_repaired = true
-		player.show_message("La charrette roule et la roue tient. Cette fois, la réparation fonctionne.")
+		player.show_message("La roue tient. La charrette peut enfin reprendre la route vers le village.")
 	else:
 		_fail_wheel_after_push(player)
 
