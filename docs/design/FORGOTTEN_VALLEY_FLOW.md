@@ -47,11 +47,21 @@ Familles alternatives ne seront ajoutées que si elles sont réellement plausibl
 Acquis : examiner, essayer, constater, formuler une hypothèse mécanique, chercher un objet adapté, corriger puis retester.
 
 ### 10–20 min — Le village s'ouvre
-Le joueur découvre le moulin, l'atelier, le pont, quelques habitants et aperçoit les ruines de la montagne.
+Après la réparation, la charrette peut reprendre sa route dans l'axe réel de ses roues et conduit naturellement le regard vers le pont et le village.
 
-Des détails intéressants sont montrés sans devenir immédiatement des objectifs.
+Le joueur découvre un premier espace explorable contenant :
+- un pont réellement traversable ;
+- le vieux moulin ;
+- l'atelier ;
+- un habitant avec un dialogue contextuel ;
+- quelques bâtiments de village ;
+- la borne ancienne **soleil + III** sur le trajet.
 
-Une borne ancienne peut porter le symbole **soleil + III**. Inspection focalisée : zoom, arrière-plan atténué, symbole lisible, commentaire minimal.
+Le village n'est pas verrouillé artificiellement par un « niveau terminé ». La conséquence recherchée est spatiale : la route se prolonge, de nouveaux lieux deviennent lisibles et le joueur comprend qu'il a quitté le petit problème de la charrette pour entrer dans un monde plus large.
+
+Le moulin et l'atelier sont examinables mais ne lancent pas encore un faux puzzle. Le moulin montre simplement une anomalie observable : sa roue est immobile alors que l'eau arrive jusqu'à lui.
+
+La borne **soleil + III** reste une information librement observable, sans expliquer immédiatement son utilité future.
 
 Acquis : dialogue, inspection, mémoire spatiale, navigation, distinction décor/élément significatif.
 
