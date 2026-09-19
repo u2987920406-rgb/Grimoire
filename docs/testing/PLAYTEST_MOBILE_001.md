@@ -142,3 +142,28 @@ La charrette avance réellement sur une courte distance, puis la roue ressort de
 
 ### Principe
 Le dialogue peut suggérer une expérience, mais il ne doit pas devenir une condition cachée qui autorise physiquement l'action.
+
+
+## Validation — boucle charrette complète
+
+**Statut : validé sur mobile.**
+
+Le test utilisateur confirme que :
+- la roue se remet correctement sur l'essieu ;
+- l'échec initial après poussée est compréhensible ;
+- le trou de retenue et la cheville permettent une correction cohérente ;
+- après réparation, la charrette roule dans le plan réel de ses roues ;
+- la poussée n'est proposée qu'à l'avant ou à l'arrière ;
+- aucune poussée latérale incohérente n'est possible ;
+- les réactions du PNJ suivent correctement l'état du problème.
+
+### Leçon de conception retenue
+
+Pour tout objet physique important, vérifier avant livraison :
+1. cohérence entre mesh et collision ;
+2. axe mécanique réel ;
+3. direction de mouvement permise ;
+4. points d'interaction compatibles avec cette direction ;
+5. comportement visible conforme à la physique attendue.
+
+Une correction de logique ne doit jamais être considérée comme suffisante si la géométrie de l'objet raconte autre chose.
