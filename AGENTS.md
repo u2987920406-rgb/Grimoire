@@ -105,3 +105,26 @@ Une tâche n'est terminée que si :
 - les critères d'acceptation sont satisfaits ;
 - la documentation correspond à l'implémentation ;
 - les problèmes restants sont explicitement signalés.
+
+
+## Release gate — produit jouable
+
+Une compilation réussie ne suffit jamais à considérer une itération comme livrable.
+
+Avant publication d'une version jouable, vérifier au minimum :
+- chargement de la scène réelle ;
+- parcours E2E critique ;
+- collisions du sol et des objets structurants ;
+- limites du monde ;
+- support physique sous les zones clés ;
+- interactions critiques et conséquences ;
+- export de la cible de test.
+
+Le pipeline Web doit bloquer la publication si l'un des smoke tests E2E ou navigation échoue.
+
+Ne jamais présenter comme « testé » un comportement qui n'a été vérifié que par présence de code. Distinguer :
+- vérification automatique/headless ;
+- inspection de scène/code ;
+- playtest humain visuel/tactile.
+
+Une nouvelle zone ne peut pas étendre son mesh sans étendre ou repenser sa collision correspondante.
