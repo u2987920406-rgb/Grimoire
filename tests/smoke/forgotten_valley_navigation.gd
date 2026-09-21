@@ -56,6 +56,24 @@ func _run() -> void:
 	# Bridge must be an actual collider, not decoration.
 	var bridge_collision := world.get_node("Bridge/Collision") as CollisionShape3D
 	_check(bridge_collision != null and not bridge_collision.disabled, "bridge collision missing")
+	var south_ramp := world.get_node("RampSouth/Collision") as CollisionShape3D
+	var north_ramp := world.get_node("RampNorth/Collision") as CollisionShape3D
+	_check(south_ramp != null and north_ramp != null, "bridge approach ramps missing")
+
+	# The player must actually be able to cross the bridge from south to north.
+	var player := world.get_node("Player") as PlayerController
+	player.global_position = Vector3(2.2, 1.2, -1.7)
+	player.velocity = Vector3.ZERO
+	player.set_touch_move_input(Vector2(0.0, -1.0))
+	for _i in range(180):
+		await physics_frame
+	player.set_touch_move_input(Vector2.ZERO)
+	_check(player.global_position.z < -8.0, "player could not traverse bridge end-to-end")
+
+	# The river must not be freely walkable outside the bridge opening.
+	var left_block := _ray_hit(space, Vector3(-2.0, 1.0, -3.0), Vector3(-2.0, 1.0, -7.2))
+	var right_block := _ray_hit(space, Vector3(4.3, 1.0, -3.0), Vector3(4.3, 1.0, -7.2))
+	_check(not left_block.is_empty() and not right_block.is_empty(), "river can be crossed outside bridge")
 
 	# Perimeter must be closed in all four cardinal directions.
 	var boundary_probes := [
