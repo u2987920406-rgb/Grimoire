@@ -141,6 +141,18 @@ size = Vector3(2.6, 0.22, 4.4)
 [sub_resource type="BoxShape3D" id="BoxShape_bridge"]
 size = Vector3(2.6, 0.22, 4.4)
 
+[sub_resource type="BoxMesh" id="BoxMesh_bridge_ramp"]
+size = Vector3(2.6, 0.16, 1.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape_bridge_ramp"]
+size = Vector3(2.6, 0.16, 1.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape_river_block_left"]
+size = Vector3(5.9, 1.4, 3.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape_river_block_right"]
+size = Vector3(1.5, 1.4, 3.2)
+
 [sub_resource type="BoxMesh" id="BoxMesh_building"]
 size = Vector3(3.0, 2.4, 3.0)
 
@@ -298,6 +310,40 @@ material_override = SubResource("Material_cart")
 
 [node name="Collision" type="CollisionShape3D" parent="Bridge"]
 shape = SubResource("BoxShape_bridge")
+
+[node name="RampSouth" type="StaticBody3D" parent="."]
+position = Vector3(2.2, 0.34, -2.25)
+rotation_degrees = Vector3(-12.0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="RampSouth"]
+mesh = SubResource("BoxMesh_bridge_ramp")
+material_override = SubResource("Material_cart")
+
+[node name="Collision" type="CollisionShape3D" parent="RampSouth"]
+shape = SubResource("BoxShape_bridge_ramp")
+
+[node name="RampNorth" type="StaticBody3D" parent="."]
+position = Vector3(2.2, 0.34, -8.15)
+rotation_degrees = Vector3(12.0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="RampNorth"]
+mesh = SubResource("BoxMesh_bridge_ramp")
+material_override = SubResource("Material_cart")
+
+[node name="Collision" type="CollisionShape3D" parent="RampNorth"]
+shape = SubResource("BoxShape_bridge_ramp")
+
+[node name="RiverBlockLeft" type="StaticBody3D" parent="."]
+position = Vector3(-2.05, 0.9, -5.2)
+
+[node name="Collision" type="CollisionShape3D" parent="RiverBlockLeft"]
+shape = SubResource("BoxShape_river_block_left")
+
+[node name="RiverBlockRight" type="StaticBody3D" parent="."]
+position = Vector3(4.25, 0.9, -5.2)
+
+[node name="Collision" type="CollisionShape3D" parent="RiverBlockRight"]
+shape = SubResource("BoxShape_river_block_right")
 
 [node name="CartOwner" type="StaticBody3D" parent="."]
 position = Vector3(-2.4, 1.0, 0.7)
