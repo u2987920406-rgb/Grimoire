@@ -1,0 +1,67 @@
+name: Capture Forgotten Valley Render
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "adventures/forgotten_valley/**"
+      - "core/**"
+      - "tests/render/**"
+      - ".github/workflows/capture-render.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Prepare display tools
+        shell: bash
+        run: |
+          apt-get update
+          apt-get install -y xvfb
+
+      - name: Prepare Godot export templates
+        shell: bash
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates
+          mkdir -p ~/.config
+          if [ -d /root/.config/godot ]; then
+            mv /root/.config/godot ~/.config/godot
+          fi
+          if [ -d /root/.local/share/godot/export_templates/4.7.2.stable ]; then
+            mv /root/.local/share/godot/export_templates/4.7.2.stable ~/.local/share/godot/export_templates/4.7.2.stable
+          fi
+
+      - name: Import project
+        shell: bash
+        run: godot --headless --editor --path . --quit
+
+      - name: Capture real Godot render
+        shell: bash
+        run: |
+          xvfb-run -a godot --path . --display-driver x11 --rendering-method gl_compatibility --script tests/render/capture_forgotten_valley.gd
+          test -f build/render/forgotten_valley_real.png
+
+      - name: Publish render to web-build
+        shell: bash
+        run: |
+          git fetch origin web-build:web-build || true
+          git checkout web-build
+          mkdir -p renders
+          cp build/render/forgotten_valley_real.png renders/forgotten_valley_real.png
+          git add renders/forgotten_valley_real.png
+          git config user.name "grimoire-render-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "render: update Forgotten Valley real capture" || true
+          git push origin web-build
