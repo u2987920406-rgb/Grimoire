@@ -44,7 +44,7 @@ roughness = 0.8
 radius = 2.15
 
 [sub_resource type="BoxMesh" id="BoxMesh_ground"]
-size = Vector3(48, 0.4, 48)
+size = Vector3(60, 0.4, 60)
 
 [sub_resource type="BoxShape3D" id="BoxShape_ground"]
 size = Vector3(24, 0.4, 24)
@@ -404,7 +404,7 @@ material_override = SubResource("Material_wheel")
 position = Vector3(4.6, 1.4, -9.0)
 script = ExtResource("11_landmark")
 inspection_title = "Atelier"
-inspection_detail = "Des outils, des morceaux de bois et des pièces métalliques. Quelqu'un travaille ici régulièrement."
+inspection_detail = "Des outils, du bois et du métal. Un vieux croquis porte une phrase : « Quand les deux canaux vivent, la troisième borne du soleil répond. »"
 
 [node name="Mesh" type="MeshInstance3D" parent="Workshop"]
 mesh = SubResource("BoxMesh_building")
