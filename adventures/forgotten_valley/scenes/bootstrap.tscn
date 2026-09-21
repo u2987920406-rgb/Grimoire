@@ -20,6 +20,8 @@
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/field.gd" id="18_field"]
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/ruins_mechanism.gd" id="19_ruins"]
 [ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/mountain_heart.gd" id="20_heart"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/ruin_flow_control.gd" id="21_ruinflow"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/ruin_inscription.gd" id="22_inscription"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_player"]
 radius = 0.42
@@ -201,6 +203,24 @@ size = Vector3(2.0, 2.0, 2.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape_heart"]
 size = Vector3(2.0, 2.0, 2.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ruin_wall"]
+size = Vector3(0.5, 3.2, 8.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape_ruin_wall"]
+size = Vector3(0.5, 3.2, 8.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_flow_strip"]
+size = Vector3(1.8, 0.08, 4.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ruin_console"]
+size = Vector3(2.0, 1.2, 1.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape_ruin_console"]
+size = Vector3(2.0, 1.2, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ruin_handle"]
+size = Vector3(0.18, 1.5, 0.18)
 
 [sub_resource type="BoxMesh" id="BoxMesh_boundary_ns"]
 size = Vector3(60, 3.0, 1.0)
@@ -631,8 +651,71 @@ font_size = 88
 outline_size = 8
 billboard = 1
 
+[node name="RuinWallLeft" type="StaticBody3D" parent="."]
+position = Vector3(-2.75, 1.6, -25.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="RuinWallLeft"]
+mesh = SubResource("BoxMesh_ruin_wall")
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="RuinWallLeft"]
+shape = SubResource("BoxShape_ruin_wall")
+
+[node name="RuinWallRight" type="StaticBody3D" parent="."]
+position = Vector3(3.75, 1.6, -25.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="RuinWallRight"]
+mesh = SubResource("BoxMesh_ruin_wall")
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="RuinWallRight"]
+shape = SubResource("BoxShape_ruin_wall")
+
+[node name="RuinInscription" type="StaticBody3D" parent="."]
+position = Vector3(-1.9, 1.0, -23.2)
+script = ExtResource("22_inscription")
+title = "Mur gravé"
+detail = "Deux lignes partent d'un même cercle. L'une mène vers un symbole de roue, l'autre vers des rangées de plantes. Plus loin, les deux lignes reviennent ensemble vers un même cœur."
+
+[node name="Mesh" type="MeshInstance3D" parent="RuinInscription"]
+mesh = SubResource("BoxMesh_stone")
+scale = Vector3(0.8, 0.8, 0.35)
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="RuinInscription"]
+shape = SubResource("BoxShape_stone")
+
+[node name="RuinFlowControl" type="StaticBody3D" parent="."]
+position = Vector3(0.5, 0.8, -24.8)
+script = ExtResource("21_ruinflow")
+state_path = NodePath("../AdventureState")
+
+[node name="Mesh" type="MeshInstance3D" parent="RuinFlowControl"]
+mesh = SubResource("BoxMesh_ruin_console")
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="RuinFlowControl"]
+shape = SubResource("BoxShape_ruin_console")
+
+[node name="Handle" type="MeshInstance3D" parent="RuinFlowControl"]
+position = Vector3(0, 1.1, 0)
+mesh = SubResource("BoxMesh_ruin_handle")
+material_override = SubResource("Material_cart")
+
+[node name="LeftFlow" type="MeshInstance3D" parent="RuinFlowControl"]
+position = Vector3(-1.2, -0.52, -2.3)
+rotation_degrees = Vector3(0, 8, 0)
+mesh = SubResource("BoxMesh_flow_strip")
+material_override = SubResource("Material_water")
+
+[node name="RightFlow" type="MeshInstance3D" parent="RuinFlowControl"]
+position = Vector3(1.2, -0.52, -2.3)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("BoxMesh_flow_strip")
+material_override = SubResource("Material_water")
+
 [node name="MountainHeart" type="StaticBody3D" parent="."]
-position = Vector3(0.5, 1.2, -24.0)
+position = Vector3(0.5, 1.2, -28.0)
 script = ExtResource("20_heart")
 state_path = NodePath("../AdventureState")
 
@@ -757,7 +840,7 @@ offset_left = 1040.0
 offset_top = 18.0
 offset_right = 1260.0
 offset_bottom = 54.0
-text = "WEB E2E VALLEY"
+text = "WEB E2E RUINS"
 horizontal_alignment = 2
 theme_override_font_sizes/font_size = 16
 
