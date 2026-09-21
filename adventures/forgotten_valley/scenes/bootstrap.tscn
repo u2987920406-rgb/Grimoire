@@ -291,7 +291,6 @@ shape = SubResource("BoxShape_bridge")
 position = Vector3(-2.4, 1.0, 0.7)
 script = ExtResource("5_npc")
 cart_path = NodePath("../Cart")
-state_path = NodePath("../AdventureState")
 
 [node name="Mesh" type="MeshInstance3D" parent="CartOwner"]
 mesh = SubResource("CapsuleMesh_npc")
@@ -418,6 +417,7 @@ shape = SubResource("BoxShape_building")
 position = Vector3(1.0, 1.0, -8.3)
 script = ExtResource("12_resident")
 cart_path = NodePath("../Cart")
+state_path = NodePath("../AdventureState")
 
 [node name="Mesh" type="MeshInstance3D" parent="VillageResident"]
 mesh = SubResource("CapsuleMesh_npc")
