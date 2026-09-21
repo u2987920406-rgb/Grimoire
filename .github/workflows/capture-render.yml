@@ -56,6 +56,7 @@ jobs:
       - name: Publish render to web-build
         shell: bash
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git fetch origin web-build:web-build || true
           git checkout web-build
           mkdir -p renders
