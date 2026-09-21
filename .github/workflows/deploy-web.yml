@@ -62,12 +62,17 @@ jobs:
       - name: Publish web-build branch
         shell: bash
         run: |
+          rm -rf /tmp/grimoire-web-git
+          mkdir -p /tmp/grimoire-web-git
+          cp -a /tmp/grimoire-web/. /tmp/grimoire-web-git/
+          cd /tmp/grimoire-web-git
+          git init
           git config user.name "grimoire-web-bot"
           git config user.email "actions@users.noreply.github.com"
-          git checkout --orphan web-build-tmp
-          git rm -rf . >/dev/null 2>&1 || true
-          cp -a /tmp/grimoire-web/. .
+          git remote add origin "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          git checkout -b web-build
           git add -A
           git commit -m "web: publish $GITHUB_SHA"
-          git branch -M web-build
           git push --force origin web-build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
