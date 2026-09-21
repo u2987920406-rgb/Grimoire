@@ -47,7 +47,7 @@ radius = 2.15
 size = Vector3(60, 0.4, 60)
 
 [sub_resource type="BoxShape3D" id="BoxShape_ground"]
-size = Vector3(24, 0.4, 24)
+size = Vector3(60, 0.4, 60)
 
 [sub_resource type="StandardMaterial3D" id="Material_ground"]
 albedo_color = Color(0.36, 0.54, 0.28, 1)
@@ -189,6 +189,18 @@ size = Vector3(2.0, 2.0, 2.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape_heart"]
 size = Vector3(2.0, 2.0, 2.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_boundary_ns"]
+size = Vector3(60, 3.0, 1.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape_boundary_ns"]
+size = Vector3(60, 3.0, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_boundary_ew"]
+size = Vector3(1.0, 3.0, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape_boundary_ew"]
+size = Vector3(1.0, 3.0, 60)
 
 [node name="ForgottenValleyBootstrap" type="Node3D"]
 script = ExtResource("1_bootstrap")
@@ -584,6 +596,46 @@ material_override = SubResource("Material_water")
 
 [node name="Collision" type="CollisionShape3D" parent="MountainHeart"]
 shape = SubResource("BoxShape_heart")
+
+[node name="BoundaryNorth" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.5, -29.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="BoundaryNorth"]
+mesh = SubResource("BoxMesh_boundary_ns")
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="BoundaryNorth"]
+shape = SubResource("BoxShape_boundary_ns")
+
+[node name="BoundarySouth" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.5, 29.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="BoundarySouth"]
+mesh = SubResource("BoxMesh_boundary_ns")
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="BoundarySouth"]
+shape = SubResource("BoxShape_boundary_ns")
+
+[node name="BoundaryWest" type="StaticBody3D" parent="."]
+position = Vector3(-29.5, 1.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BoundaryWest"]
+mesh = SubResource("BoxMesh_boundary_ew")
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="BoundaryWest"]
+shape = SubResource("BoxShape_boundary_ew")
+
+[node name="BoundaryEast" type="StaticBody3D" parent="."]
+position = Vector3(29.5, 1.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BoundaryEast"]
+mesh = SubResource("BoxMesh_boundary_ew")
+material_override = SubResource("Material_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="BoundaryEast"]
+shape = SubResource("BoxShape_boundary_ew")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
