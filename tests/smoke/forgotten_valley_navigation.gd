@@ -39,7 +39,8 @@ func _run() -> void:
 		"field": Vector3(-7.0, 5, -10.5),
 		"mountain_path": Vector3(0.5, 5, -16.0),
 		"ruins_gate": Vector3(0.5, 5, -20.0),
-		"mountain_heart": Vector3(0.5, 5, -24.0),
+		"ruin_flow_control": Vector3(0.5, 5, -24.8),
+		"mountain_heart": Vector3(0.5, 5, -28.0),
 	}
 	for label in checkpoints:
 		var p: Vector3 = checkpoints[label]
@@ -86,5 +87,9 @@ func _run() -> void:
 		var hit := _ray_hit(space, probe[0], probe[1])
 		_check(not hit.is_empty(), "world boundary missing on " + str(probe[2]))
 
-	print("NAVIGATION SMOKE PASSED: ground, checkpoints, bridge and world limits")
+	var left_wall := world.get_node("RuinWallLeft/Collision") as CollisionShape3D
+	var right_wall := world.get_node("RuinWallRight/Collision") as CollisionShape3D
+	_check(left_wall != null and right_wall != null, "ruins corridor walls missing")
+
+	print("NAVIGATION SMOKE PASSED: ground, bridge, ruins corridor and world limits")
 	quit(0)
