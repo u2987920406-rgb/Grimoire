@@ -8,6 +8,7 @@ on:
       - "export_presets.cfg"
       - "core/**"
       - "adventures/**"
+      - "tests/**"
       - ".github/workflows/deploy-web.yml"
   workflow_dispatch:
 
@@ -46,6 +47,10 @@ jobs:
       - name: Import project
         shell: bash
         run: godot --headless --editor --path . --quit
+
+      - name: Run Forgotten Valley E2E smoke test
+        shell: bash
+        run: godot --headless --path . --script tests/smoke/forgotten_valley_e2e.gd
 
       - name: Export Web
         shell: bash
