@@ -1,4 +1,4 @@
-name: Deploy Web Test
+name: Publish Web Test
 
 on:
   push:
@@ -12,23 +12,24 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: "grimoire-web"
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build Godot Web
+  publish:
+    name: Build and publish Godot Web
     runs-on: ubuntu-24.04
     container:
       image: barichello/godot-ci:4.7.2
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Prepare Godot export templates
         shell: bash
@@ -49,30 +50,24 @@ jobs:
       - name: Export Web
         shell: bash
         run: |
-          mkdir -p build/web
-          godot --headless --verbose --path . --export-release "Web Test" "build/web/index.html"
-          test -f build/web/index.html
-          test -f build/web/index.wasm
-          test -f build/web/index.pck
+          rm -rf /tmp/grimoire-web
+          mkdir -p /tmp/grimoire-web
+          godot --headless --verbose --path . --export-release "Web Test" "/tmp/grimoire-web/index.html"
+          test -f /tmp/grimoire-web/index.html
+          test -f /tmp/grimoire-web/index.wasm
+          test -f /tmp/grimoire-web/index.pck
+          printf '%s\n' "$GITHUB_SHA" > /tmp/grimoire-web/source-commit.txt
+          touch /tmp/grimoire-web/.nojekyll
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: build/web
-
-  deploy:
-    name: Publish Web Test
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-24.04
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish web-build branch
+        shell: bash
+        run: |
+          git config user.name "grimoire-web-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git checkout --orphan web-build-tmp
+          git rm -rf . >/dev/null 2>&1 || true
+          cp -a /tmp/grimoire-web/. .
+          git add -A
+          git commit -m "web: publish $GITHUB_SHA"
+          git branch -M web-build
+          git push --force origin web-build
