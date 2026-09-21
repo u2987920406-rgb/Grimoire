@@ -4,6 +4,7 @@ extends StaticBody3D
 @export var gate_path: NodePath
 @onready var state: ValleyState = get_node(state_path)
 @onready var gate: StaticBody3D = get_node(gate_path)
+@onready var gate_collision: CollisionShape3D = gate.get_node("Collision")
 
 func _ready() -> void:
 	add_to_group("interactable")
@@ -25,6 +26,7 @@ func interact(player: PlayerController) -> void:
 		disc.queue_free()
 		state.open_ruins()
 		gate.visible = false
+		gate_collision.disabled = true
 		gate.process_mode = Node.PROCESS_MODE_DISABLED
 		player.show_message("Le disque s'emboîte exactement. Un grondement traverse la montagne et la porte de pierre s'abaisse.")
 		return
