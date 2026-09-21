@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |
           apt-get update
-          apt-get install -y xvfb
+          apt-get install -y xvfb fontconfig libfontconfig1 libxcursor1 libxinerama1 libxi6 libxrandr2 libxrender1 libgl1-mesa-dri libegl1
 
       - name: Prepare Godot export templates
         shell: bash
