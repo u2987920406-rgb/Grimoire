@@ -21,8 +21,8 @@ func interact(player: PlayerController) -> void:
 		player.start_inspection("Borne ancienne", "☀   %s\n\nUne borne marquée du soleil." % _roman(stone_index))
 		return
 
-	if not state.mill_restored:
-		player.start_inspection("Borne ancienne", "☀   III\n\nUn soleil… et trois traits. Une fine rainure entoure le symbole.")
+	if not state.mill_restored or not state.field_watered:
+		player.start_inspection("Borne ancienne", "☀   III\n\nUn soleil… et trois traits. Une fine rainure entoure le symbole. Rien ne bouge encore.")
 		return
 
 	if not state.sun_disc_revealed:
