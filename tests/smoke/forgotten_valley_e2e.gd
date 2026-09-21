@@ -29,13 +29,14 @@ func _run() -> void:
 	var disc := world.get_node_or_null("SunDisc") as CarryableBody
 	var ruins := world.get_node_or_null("RuinsMechanism")
 	var gate := world.get_node_or_null("RuinsGate") as StaticBody3D
+	var flow_control := world.get_node_or_null("RuinFlowControl")
 	var heart := world.get_node_or_null("MountainHeart")
 
 	_check(state != null, "AdventureState missing")
 	_check(player != null, "Player missing")
 	_check(cart != null and wheel != null and peg != null, "cart repair objects missing")
 	_check(stone != null and disc != null, "solar clue objects missing")
-	_check(ruins != null and gate != null and heart != null, "ruins objects missing")
+	_check(ruins != null and gate != null and flow_control != null and heart != null, "ruins objects missing")
 
 	# Cart repair loop.
 	player.pick_up(wheel)
@@ -72,8 +73,16 @@ func _run() -> void:
 	var gate_collision := gate.get_node("Collision") as CollisionShape3D
 	_check(gate_collision.disabled, "ruins gate collision should be disabled")
 
+	# Final ruins transfer puzzle: opening the door is not yet the ending.
 	heart.interact(player)
-	_check(state.adventure_complete, "mountain heart should complete adventure")
+	_check(not state.adventure_complete, "heart must not complete before ancient network is balanced")
 
-	print("E2E SMOKE PASSED: cart -> water -> stone III -> disc -> ruins -> ending")
+	flow_control.interact(player)
+	_check(state.ruins_flow_setting == 1, "first flow adjustment should reach balanced setting")
+	_check(state.ancient_network_restored, "balanced ruin flow should restore ancient network")
+
+	heart.interact(player)
+	_check(state.adventure_complete, "mountain heart should complete after ancient network restoration")
+
+	print("E2E SMOKE PASSED: cart -> water -> stone III -> disc -> ruins flow -> ending")
 	quit(0)
