@@ -26,7 +26,7 @@ func _run() -> void:
 	await physics_frame
 	await physics_frame
 
-	var space := world.get_world_3d().direct_space_state
+	var space: PhysicsDirectSpaceState3D = world.get_world_3d().direct_space_state
 
 	# Every major playable checkpoint must have physical support below it.
 	var checkpoints := {
