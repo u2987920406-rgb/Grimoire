@@ -18,6 +18,7 @@ func _simulate(scene: Node, frames: int) -> void:
 		scene.call("_process", 1.0 / 60.0)
 
 func _run() -> void:
+	print("2D SMOKE: start")
 	var packed := load("res://adventures/forgotten_valley/scenes/village_2d.tscn") as PackedScene
 	if not _check(packed != null, "village_2d scene must load"):
 		return
@@ -37,6 +38,7 @@ func _run() -> void:
 	if not _check(scene.get_node_or_null("World/HouseHotspot") != null, "house hotspot missing"):
 		return
 
+	print("2D SMOKE: scene loaded")
 	# Land movement.
 	var initial := player.position
 	scene.call("_set_walk_target", Vector2(250, 620))
@@ -44,6 +46,7 @@ func _run() -> void:
 	if not _check(player.position.x < initial.x - 100.0, "player did not move on foreground land"):
 		return
 
+	print("2D SMOKE: land movement ok")
 	# Water must reject direct movement.
 	var before_water := player.position
 	scene.call("_set_walk_target", Vector2(1040, 620))
@@ -54,6 +57,7 @@ func _run() -> void:
 	if not _check("pont" in label.text.to_lower(), "water feedback should direct player to bridge"):
 		return
 
+	print("2D SMOKE: water rejection ok")
 	# Crossing must use bridge corridor.
 	player.position = Vector2(560, 590)
 	scene.call("_set_walk_target", Vector2(1080, 470))
@@ -67,6 +71,7 @@ func _run() -> void:
 	if not _check(player.position.x > 980.0 and player.position.y < 520.0, "player did not reach opposite bank through bridge"):
 		return
 
+	print("2D SMOKE: bridge crossing ok")
 	# Hotspot feedback.
 	scene.call("_on_hotspot_activated", "mill")
 	var panel := scene.get_node("UI/MessagePanel") as PanelContainer
