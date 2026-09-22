@@ -1,0 +1,100 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Texture2D" path="res://adventures/forgotten_valley/art/2d/village_background.svg" id="1_bg"]
+[ext_resource type="Texture2D" path="res://adventures/forgotten_valley/art/2d/explorer.svg" id="2_player"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/2d/village_scene.gd" id="3_scene"]
+[ext_resource type="Script" path="res://adventures/forgotten_valley/scripts/2d/hotspot_2d.gd" id="4_hotspot"]
+
+[sub_resource type="RectangleShape2D" id="ShapeMill"]
+size = Vector2(190, 180)
+[sub_resource type="RectangleShape2D" id="ShapeBridge"]
+size = Vector2(300, 130)
+[sub_resource type="RectangleShape2D" id="ShapeRuins"]
+size = Vector2(240, 165)
+[sub_resource type="RectangleShape2D" id="ShapeHouse"]
+size = Vector2(245, 190)
+
+[node name="Village2D" type="Node2D"]
+script = ExtResource("3_scene")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="World"]
+texture = ExtResource("1_bg")
+centered = false
+
+[node name="Player" type="Sprite2D" parent="World"]
+position = Vector2(440, 570)
+texture = ExtResource("2_player")
+scale = Vector2(0.78, 0.78)
+
+[node name="MillHotspot" type="Area2D" parent="World" groups=["hotspot_2d"]]
+position = Vector2(715, 410)
+script = ExtResource("4_hotspot")
+hotspot_id = "mill"
+label = "Examiner le moulin"
+
+[node name="Collision" type="CollisionShape2D" parent="World/MillHotspot"]
+shape = SubResource("ShapeMill")
+
+[node name="BridgeHotspot" type="Area2D" parent="World" groups=["hotspot_2d"]]
+position = Vector2(850, 505)
+script = ExtResource("4_hotspot")
+hotspot_id = "bridge"
+label = "Examiner le pont"
+
+[node name="Collision" type="CollisionShape2D" parent="World/BridgeHotspot"]
+shape = SubResource("ShapeBridge")
+
+[node name="RuinsHotspot" type="Area2D" parent="World" groups=["hotspot_2d"]]
+position = Vector2(915, 145)
+script = ExtResource("4_hotspot")
+hotspot_id = "ruins"
+label = "Observer les ruines"
+
+[node name="Collision" type="CollisionShape2D" parent="World/RuinsHotspot"]
+shape = SubResource("ShapeRuins")
+
+[node name="HouseHotspot" type="Area2D" parent="World" groups=["hotspot_2d"]]
+position = Vector2(205, 390)
+script = ExtResource("4_hotspot")
+hotspot_id = "house"
+label = "Examiner la maison"
+
+[node name="Collision" type="CollisionShape2D" parent="World/HouseHotspot"]
+shape = SubResource("ShapeHouse")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="SceneTitle" type="Label" parent="UI"]
+offset_left = 28.0
+offset_top = 24.0
+offset_right = 460.0
+offset_bottom = 70.0
+text = "La Vallée oubliée — Village"
+theme_override_font_sizes/font_size = 28
+
+[node name="Hint" type="Label" parent="UI"]
+offset_left = 28.0
+offset_top = 76.0
+offset_right = 660.0
+offset_bottom = 118.0
+text = "Touchez le chemin pour vous déplacer • touchez un élément pour l'examiner"
+theme_override_font_sizes/font_size = 18
+
+[node name="MessagePanel" type="PanelContainer" parent="UI"]
+offset_left = 330.0
+offset_top = 565.0
+offset_right = 950.0
+offset_bottom = 680.0
+
+[node name="Margin" type="MarginContainer" parent="UI/MessagePanel"]
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="Message" type="Label" parent="UI/MessagePanel/Margin"]
+text = ""
+autowrap_mode = 2
+theme_override_font_sizes/font_size = 22
