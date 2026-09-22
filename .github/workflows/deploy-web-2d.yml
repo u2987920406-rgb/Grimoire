@@ -1,0 +1,84 @@
+name: Publish 2D Web Test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "project.godot"
+      - "export_presets.cfg"
+      - "adventures/forgotten_valley/art/2d/**"
+      - "adventures/forgotten_valley/scripts/2d/**"
+      - "adventures/forgotten_valley/scenes/village_2d.tscn"
+      - "tests/smoke/forgotten_valley_2d.gd"
+      - ".github/workflows/deploy-web-2d.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: grimoire-web-2d
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Validate and publish 2D Godot Web
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Prepare Godot export templates
+        shell: bash
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates
+          mkdir -p ~/.config
+          if [ -d /root/.config/godot ]; then
+            mv /root/.config/godot ~/.config/godot
+          fi
+          if [ -d /root/.local/share/godot/export_templates/4.7.2.stable ]; then
+            mv /root/.local/share/godot/export_templates/4.7.2.stable ~/.local/share/godot/export_templates/4.7.2.stable
+          fi
+
+      - name: Import project
+        shell: bash
+        run: timeout 60s godot --headless --editor --path . --quit
+
+      - name: Run 2D gameplay smoke
+        shell: bash
+        run: timeout 30s godot --headless --path . --script tests/smoke/forgotten_valley_2d.gd
+
+      - name: Export Web
+        shell: bash
+        run: |
+          rm -rf /tmp/grimoire-web-2d
+          mkdir -p /tmp/grimoire-web-2d
+          timeout 120s godot --headless --path . --export-release "Web Test" "/tmp/grimoire-web-2d/index.html"
+          test -f /tmp/grimoire-web-2d/index.html
+          test -f /tmp/grimoire-web-2d/index.wasm
+          test -f /tmp/grimoire-web-2d/index.pck
+          printf '%s\n' "$GITHUB_SHA" > /tmp/grimoire-web-2d/source-commit.txt
+          touch /tmp/grimoire-web-2d/.nojekyll
+
+      - name: Publish web-build-2d branch
+        shell: bash
+        run: |
+          rm -rf /tmp/grimoire-web-2d-git
+          mkdir -p /tmp/grimoire-web-2d-git
+          cp -a /tmp/grimoire-web-2d/. /tmp/grimoire-web-2d-git/
+          cd /tmp/grimoire-web-2d-git
+          git init
+          git config user.name "grimoire-2d-web-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git remote add origin "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          git checkout -b web-build-2d
+          git add -A
+          git commit -m "web2d: publish $GITHUB_SHA"
+          git push --force origin web-build-2d
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
