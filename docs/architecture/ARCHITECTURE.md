@@ -6,7 +6,7 @@
 - Langage principal : GDScript typé.
 - Architecture : Adventure Core partagé + Adventures modulaires.
 - Contenu d'aventure : data-driven autant que raisonnablement possible.
-- 3D stylisée, périmètre volontairement contenu.
+- Présentation par aventure : 2D dynamique / 2.5D illustrée pour La Vallée oubliée ; le Core ne dépend pas d'un mode de rendu unique.
 - Les mécaniques fondamentales fonctionnent sans LLM.
 
 La version exacte du moteur doit être verrouillée dans le projet lors du bootstrap technique et enregistrée par ADR si elle diffère de la décision courante.
