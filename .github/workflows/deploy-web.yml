@@ -56,6 +56,10 @@ jobs:
         shell: bash
         run: godot --headless --path . --script tests/smoke/forgotten_valley_navigation.gd
 
+      - name: Run Forgotten Valley 2D smoke test
+        shell: bash
+        run: godot --headless --path . --script tests/smoke/forgotten_valley_2d.gd
+
       - name: Export Web
         shell: bash
         run: |
