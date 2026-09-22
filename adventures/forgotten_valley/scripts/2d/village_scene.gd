@@ -11,7 +11,7 @@ const WALK_MAX_Y := 650.0
 
 # La rivière occupe la partie basse-droite du tableau. Elle est bloquante :
 # on la traverse uniquement par le pont.
-const WATER_POLYGON := PackedVector2Array([
+var WATER_POLYGON := PackedVector2Array([
 	Vector2(555, 470),
 	Vector2(650, 450),
 	Vector2(760, 465),
@@ -26,7 +26,7 @@ const WATER_POLYGON := PackedVector2Array([
 ])
 
 # Corridor jouable du pont.
-const BRIDGE_POLYGON := PackedVector2Array([
+var BRIDGE_POLYGON := PackedVector2Array([
 	Vector2(675, 555),
 	Vector2(700, 495),
 	Vector2(780, 445),
@@ -40,7 +40,7 @@ const BRIDGE_POLYGON := PackedVector2Array([
 ])
 
 # Petite zone de rive opposée accessible après le pont.
-const NORTH_BANK_POLYGON := PackedVector2Array([
+var NORTH_BANK_POLYGON := PackedVector2Array([
 	Vector2(760, 420),
 	Vector2(1210, 420),
 	Vector2(1210, 535),
