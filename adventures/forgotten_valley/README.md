@@ -1,12 +1,14 @@
 # La Vallée oubliée
 
-**Statut : concept validé / conception détaillée à venir**
+**Statut : E2E 3D validé / pivot 2D dynamique en cours**
 
 Première aventure de Grimoire et premier banc d'essai de l'Adventure Core.
 
 ## Direction
 
-Aventure 3D stylisée, chaleureuse, mystérieuse, avec un esprit de jeune explorateur : village, rivière, moulin, forêt, atelier, mécanismes et ruines visibles dans les hauteurs.
+Aventure 2D dynamique / 2.5D illustrée, chaleureuse et mystérieuse, avec un esprit de jeune explorateur : village, rivière, moulin, forêt, atelier, mécanismes et ruines visibles dans les hauteurs.
+
+La version 3D graybox reste conservée comme référence E2E jusqu'à ce que la version 2D retrouve toute sa couverture fonctionnelle.
 
 Références d'intention, sans copie :
 - plaisir d'enquête et d'observation des point-and-click ;
