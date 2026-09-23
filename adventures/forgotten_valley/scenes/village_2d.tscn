@@ -98,3 +98,43 @@ theme_override_constants/margin_bottom = 18
 text = ""
 autowrap_mode = 2
 theme_override_font_sizes/font_size = 22
+
+
+[node name="ActionPanel" type="PanelContainer" parent="UI"]
+offset_left = 820.0
+offset_top = 520.0
+offset_right = 1255.0
+offset_bottom = 700.0
+
+[node name="Margin" type="MarginContainer" parent="UI/ActionPanel"]
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="UI/ActionPanel/Margin"]
+theme_override_constants/separation = 10
+
+[node name="TargetName" type="Label" parent="UI/ActionPanel/Margin/VBox"]
+text = "Élément"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 20
+
+[node name="Buttons" type="HBoxContainer" parent="UI/ActionPanel/Margin/VBox"]
+theme_override_constants/separation = 8
+
+[node name="Examine" type="Button" parent="UI/ActionPanel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(92, 64)
+text = "Examiner"
+
+[node name="Talk" type="Button" parent="UI/ActionPanel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(92, 64)
+text = "Parler"
+
+[node name="Take" type="Button" parent="UI/ActionPanel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(92, 64)
+text = "Prendre"
+
+[node name="Use" type="Button" parent="UI/ActionPanel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(92, 64)
+text = "Utiliser"
