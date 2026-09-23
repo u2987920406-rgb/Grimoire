@@ -13,5 +13,7 @@ func _ready() -> void:
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		activated.emit(hotspot_id)
+		get_viewport().set_input_as_handled()
 	elif event is InputEventScreenTouch and event.pressed:
 		activated.emit(hotspot_id)
+		get_viewport().set_input_as_handled()
