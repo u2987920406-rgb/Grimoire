@@ -4,6 +4,12 @@ extends Node2D
 @onready var message_panel: PanelContainer = $UI/MessagePanel
 @onready var message_label: Label = $UI/MessagePanel/Margin/Message
 @onready var scene_title: Label = $UI/SceneTitle
+@onready var action_panel: PanelContainer = $UI/ActionPanel
+@onready var target_name: Label = $UI/ActionPanel/Margin/VBox/TargetName
+@onready var examine_button: Button = $UI/ActionPanel/Margin/VBox/Buttons/Examine
+@onready var talk_button: Button = $UI/ActionPanel/Margin/VBox/Buttons/Talk
+@onready var take_button: Button = $UI/ActionPanel/Margin/VBox/Buttons/Take
+@onready var use_button: Button = $UI/ActionPanel/Margin/VBox/Buttons/Use
 
 const WALK_SPEED := 330.0
 const WALK_MIN_Y := 420.0
@@ -53,10 +59,16 @@ var NORTH_BANK_POLYGON := PackedVector2Array([
 var target_position: Vector2
 var moving := false
 var _route: Array[Vector2] = []
+var selected_hotspot := ""
 
 func _ready() -> void:
 	target_position = player.position
 	message_panel.visible = false
+	action_panel.visible = false
+	examine_button.pressed.connect(func(): _perform_action("examine"))
+	talk_button.pressed.connect(func(): _perform_action("talk"))
+	take_button.pressed.connect(func(): _perform_action("take"))
+	use_button.pressed.connect(func(): _perform_action("use"))
 	for hotspot in get_tree().get_nodes_in_group("hotspot_2d"):
 		hotspot.activated.connect(_on_hotspot_activated)
 	scene_title.text = "La Vallée oubliée — Village"
@@ -131,15 +143,57 @@ func _plan_route(from: Vector2, to: Vector2) -> Array[Vector2]:
 	return [north_exit, bridge_mid_2, bridge_mid_1, south_entry, to]
 
 func _on_hotspot_activated(hotspot_id: String) -> void:
+	selected_hotspot = hotspot_id
+	moving = false
+	_route.clear()
+	_configure_action_panel(hotspot_id)
+
+func _configure_action_panel(hotspot_id: String) -> void:
+	action_panel.visible = true
+	examine_button.disabled = false
+	talk_button.disabled = true
+	take_button.disabled = true
+	use_button.disabled = true
+
 	match hotspot_id:
 		"mill":
-			_show_message("Le moulin domine le canal. Sa grande roue semble liée au débit de l'eau.")
+			target_name.text = "Le moulin"
+			use_button.disabled = false
 		"bridge":
-			_show_message("Le pont de pierre est le passage sûr pour rejoindre l'autre rive.")
+			target_name.text = "Le pont"
+			use_button.disabled = false
 		"ruins":
-			_show_message("Les ruines veillent au-dessus de la vallée. Elles semblent reliées aux anciennes bornes solaires.")
+			target_name.text = "Les ruines"
+			use_button.disabled = false
 		"house":
-			_show_message("Une maison du village. Des outils et des traces de travail montrent qu'elle est encore habitée.")
+			target_name.text = "La maison"
+			talk_button.disabled = false
+
+func _perform_action(action: String) -> void:
+	if selected_hotspot.is_empty():
+		return
+
+	match [selected_hotspot, action]:
+		["mill", "examine"]:
+			_show_message("Le moulin domine le canal. Sa grande roue dépend clairement du débit de l'eau.")
+		["mill", "use"]:
+			_show_message("Le mécanisme est de l'autre côté. Il faut d'abord rejoindre le moulin.")
+		["bridge", "examine"]:
+			_show_message("Le pont de pierre relie les deux rives. C'est le seul passage sûr au-dessus de l'eau.")
+		["bridge", "use"]:
+			var destination := Vector2(1030, 475) if not _is_north_side(player.position) else Vector2(560, 590)
+			_set_walk_target(destination)
+			_show_message("Tu empruntes le pont.")
+		["ruins", "examine"]:
+			_show_message("Les ruines dominent la vallée. Le symbole solaire y apparaît encore.")
+		["ruins", "use"]:
+			_show_message("Elles sont trop loin pour l'instant. Le chemin monte depuis le village.")
+		["house", "examine"]:
+			_show_message("Une maison habitée : outils, volets ouverts et traces de passage.")
+		["house", "talk"]:
+			_show_message("Une voix répond depuis l'intérieur : « Le meunier est près de la roue. »")
+		_:
+			_show_message("Cette action n'a pas de sens ici.")
 
 func _show_message(text: String) -> void:
 	message_label.text = text
