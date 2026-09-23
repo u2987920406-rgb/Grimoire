@@ -72,13 +72,32 @@ func _run() -> void:
 		return
 
 	print("2D SMOKE: bridge crossing ok")
-	# Hotspot feedback.
+	# Contextual action system.
 	scene.call("_on_hotspot_activated", "mill")
-	var panel := scene.get_node("UI/MessagePanel") as PanelContainer
-	if not _check(panel.visible, "hotspot did not create visible feedback"):
+	var action_panel := scene.get_node("UI/ActionPanel") as PanelContainer
+	var examine_button := scene.get_node("UI/ActionPanel/Margin/VBox/Buttons/Examine") as Button
+	var use_button := scene.get_node("UI/ActionPanel/Margin/VBox/Buttons/Use") as Button
+	if not _check(action_panel.visible, "hotspot did not open contextual action panel"):
 		return
-	if not _check("moulin" in label.text.to_lower(), "mill hotspot feedback missing"):
+	if not _check(not examine_button.disabled, "examine action should be available for mill"):
+		return
+	if not _check(not use_button.disabled, "use action should be available for mill"):
 		return
 
-	print("2D SMOKE PASSED: land movement, blocked water, bridge crossing, hotspots")
+	scene.call("_perform_action", "examine")
+	var panel := scene.get_node("UI/MessagePanel") as PanelContainer
+	if not _check(panel.visible, "examine action did not create visible feedback"):
+		return
+	if not _check("moulin" in label.text.to_lower(), "mill examine feedback missing"):
+		return
+
+	# Bridge use must trigger a real movement route.
+	player.position = Vector2(560, 590)
+	scene.call("_on_hotspot_activated", "bridge")
+	scene.call("_perform_action", "use")
+	_simulate(scene, 300)
+	if not _check(player.position.x > 980.0 and player.position.y < 520.0, "bridge use action did not move player across"):
+		return
+
+	print("2D SMOKE PASSED: land movement, blocked water, bridge crossing, contextual actions")
 	quit(0)
